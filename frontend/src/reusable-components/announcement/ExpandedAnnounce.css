@@ -1,0 +1,16 @@
+.announcement-like {
+  background: url("../../assets/images/fist.png");
+  background-size: cover;
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+  transition: 200ms;
+  cursor: pointer;
+}
+
+.--isAnnouncementLiked {
+  background: url("../../assets/images/fist-colored.png");
+  width: 2rem;
+  height: 2rem;
+  background-size: cover;
+}

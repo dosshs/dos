@@ -1,0 +1,27 @@
+.replies-container {
+  padding: 1.5rem 2rem;
+  min-height: 1rem;
+}
+
+.reply {
+  margin-bottom: 1rem;
+  border: 1px solid #4f709c;
+  padding: 1rem;
+  border-radius: 1rem;
+  position: relative;
+  animation: postPopUp 300ms ease-out;
+}
+
+.reply:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 700px) {
+  .replies-container {
+    padding: 1rem;
+  }
+
+  /* .reply-to-post {
+    padding: 0 1rem;
+  } */
+}

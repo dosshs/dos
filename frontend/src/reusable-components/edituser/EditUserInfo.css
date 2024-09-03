@@ -1,0 +1,138 @@
+.edit-userinfo-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40rem;
+  height: 33rem;
+  transform: translate(-50%, -50%);
+  background-color: #f0f0f0;
+  border-radius: 1rem;
+  padding: 1rem 2rem;
+  z-index: 2;
+  text-align: center;
+}
+
+.credentials {
+  position: relative;
+  background-color: #c5e7ed;
+  width: 100%;
+  height: 15rem;
+  border-radius: 1rem;
+}
+
+.email-pass-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  /* background-color: #177282; */
+  /* width: 23rem; */
+  /* height: 10rem; */
+}
+
+.save-user-changes {
+  margin-top: 1.5rem;
+  background-color: #e5d283;
+  /* color: white; */
+  width: 7.5rem;
+  padding: 0.5rem 0;
+  border: 1px solid #213555;
+  border-radius: 1rem;
+  transition: 200ms;
+}
+
+.change-pass-btn {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.save-user-changes:active {
+  transform: scale(0.95);
+}
+
+.username-container {
+  margin-bottom: 2rem;
+}
+
+.--credential-info {
+  background-color: #213555;
+  color: white;
+  /* margin-bottom: 1rem; */
+  padding: 0.5rem 2rem;
+  width: 20rem;
+  text-align: center;
+  border-radius: 1rem;
+}
+
+.credential-label {
+  font-weight: 700;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+.edit-info {
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+  padding: 0.2rem 0.5rem;
+  width: 20rem;
+}
+
+.edit-info:focus {
+  outline: 0;
+}
+
+.change-pass-modal {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f0f0f0;
+  width: 20rem;
+  height: 23rem;
+  border-radius: 1rem;
+  padding: 3.5rem 1rem 2rem 1rem;
+  z-index: 3;
+  text-align: center;
+}
+
+.change-pass-input {
+  width: 15rem;
+  padding: 0.5rem 1rem;
+  background-color: #0cc0df;
+  border: 0;
+  border-radius: 1rem;
+}
+
+.--current-pass {
+  background-color: #4f709c;
+  color: white;
+}
+
+.change-pass-label {
+  margin-bottom: 1rem;
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.--confirm-pass {
+  background-color: #ff3131;
+  border: 0;
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .edit-userinfo-modal {
+    width: 95%;
+  }
+
+  .save-user-changes {
+    width: 9rem;
+  }
+}
