@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const postController = require("../../controller/Content/PostController");
-const likeController = require("../../controller/Content Interaction/PostLikeController");
-const commentController = require("../../controller/Content Interaction/PostCommentController");
+const likeController = require("../../controller/Content Interaction/Post/PostLikeController");
+const commentController = require("../../controller/Content Interaction/Post/PostCommentController");
 const reportPostController = require("../../controller/Content Interaction/ReportPostController");
 
 //Post=============================================
@@ -28,10 +28,10 @@ router.delete("/:id", postController.post_delete);
 router.post("/like", likeController.likePost);
 
 //Unlike Post
-router.delete("/like/:likeId", likeController.unlikePost);
+router.delete("/like/unlike", likeController.unlikePost);
 
 //Get Post Likes number
-router.get("/like/count/:postId", likeController.getPostLikes);
+router.get("/like/count/:postId", likeController.getPostLikeCount);
 
 //Comment==============================================
 //Comment on Post

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const announcementController = require("../../controller/Content/AnnouncementController");
-const likeController = require("../../controller/Content Interaction/AnnouncementLikeController");
-const commentController = require("../../controller/Content Interaction/AnnouncementCommentController");
+const likeController = require("../../controller/Content Interaction/Announcement/AnnouncementLikeController");
+const commentController = require("../../controller/Content Interaction/Announcement/AnnouncementCommentController");
 
 //Get Announcements
 router.get("/", announcementController.announcement_index);

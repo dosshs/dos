@@ -1,4 +1,4 @@
-const User = require("../../models/User");
+const User = require("../../models/User/User");
 
 const email_verification = async (req, res) => {
   const { token } = req.query;
