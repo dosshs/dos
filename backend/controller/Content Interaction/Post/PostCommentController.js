@@ -1,5 +1,6 @@
 const PostComment = require("../../../models/Content Interaction/Post/PostComment");
 const PostReply = require("../../../models/Content Interaction/Post/PostReply");
+const Post = require("../../../models/Content/Post");
 
 const commentPost = async (req, res) => {
   const {
@@ -38,6 +39,20 @@ const commentPost = async (req, res) => {
   try {
     await comment.save();
 
+    if (postId) {
+      updatedModel = await Post.findByIdAndUpdate(
+        postId,
+        { $push: { comments: comment._id } },
+        { new: true }
+      );
+    } else if (postCommentId) {
+      updatedModel = await PostComment.findByIdAndUpdate(
+        postCommentId,
+        { $push: { comments: comment._id } },
+        { new: true }
+      );
+    }
+
     return res.status(200).json({
       message: "Post commented Successfully",
       comment,
@@ -49,19 +64,36 @@ const commentPost = async (req, res) => {
 };
 
 const getPostComments = async (req, res) => {
-  if (req.query.postId) query = { postId: req.query.postId };
-  else if (req.query.postCommentId)
-    query = { postCommentId: req.query.postCommentId };
-  else {
+  const { postId, postCommentId } = req.query;
+
+  if (!postId && !postCommentId)
     return res.status(400).json({
-      message: "No Post Id or Comment Id Provided",
+      message: "Bad Request: Could not identify if Post or Post Comment",
     });
-  }
 
   try {
-    const comments = await PostComment.find(query);
+    let comments = [];
+    if (postId) {
+      const post = await Post.findById(postId);
+      comments = await Promise.all(
+        post.comments.map(async (id) => {
+          const comment = await PostComment.findById(id);
+          console.log(comment);
+          return comment;
+        })
+      );
+    } else if (postId) {
+      const postComment = await PostComment.findById(postCommentId);
+      comments = await Promise.all(
+        postComment.comments.map(async (id) => {
+          const comment = await PostComment.findById(id);
+          console.log(comment);
+          return comment;
+        })
+      );
+    }
 
-    if (comments) {
+    if (comments.length > 0) {
       return res.status(200).json({
         comments,
       });
@@ -77,17 +109,23 @@ const getPostComments = async (req, res) => {
 };
 
 const getPostCommentCount = async (req, res) => {
-  if (req.query.postId) query = { postId: req.query.postId };
-  else if (req.query.postCommentId)
-    query = { postCommentId: req.query.postCommentId };
-  else {
+  const { postId, postCommentId } = req.query;
+
+  if (!postId && !postCommentId)
     return res.status(400).json({
-      message: "No Post Id or Comment Id Provided",
+      message: "Bad Request: Could not identify if Post or Post Comment",
     });
-  }
 
   try {
-    const commentCount = await PostComment.countDocuments(query);
+    let commentCount;
+
+    if (postId) {
+      const post = await Post.findById(postId);
+      commentCount = post.comments.length;
+    } else if (postCommentId) {
+      const postComment = await PostComment.findById(postCommentId);
+      commentCount = postComment.comments.length;
+    }
 
     return res.status(200).json({
       commentCount,
@@ -99,11 +137,44 @@ const getPostCommentCount = async (req, res) => {
 };
 
 const deleteComment = async (req, res) => {
-  const { commentId } = req.params;
-  try {
-    const deletedComment = await PostComment.findByIdAndDelete(commentId);
+  const { postCommentId, postReplyId } = req.query;
 
-    if (deletedComment) {
+  try {
+    let comment;
+    if (postCommentId) {
+      comment = await PostComment.findById(postCommentId);
+      if (!comment)
+        return res.status(404).json({
+          message: "Post Comment not found",
+        });
+
+      await Post.findByIdAndUpdate(
+        comment.postId,
+        { $pull: { comments: comment._id } },
+        { new: true }
+      );
+    } else if (postReplyId) {
+      comment = await PostReply.findById(postReplyId);
+      if (!comment)
+        return res.status(404).json({
+          message: "Post Comment not found",
+        });
+
+      await PostComment.findByIdAndUpdate(
+        comment.postCommentId,
+        { $pull: { comments: comment._id } },
+        { new: true }
+      );
+    } else {
+      return res.status(400).json({
+        message:
+          "Bad Request: Could not identify if Post Comment or Post Reply",
+      });
+    }
+
+    await comment.deleteOne();
+
+    if (comment) {
       return res.status(200).json({
         message: "Comment deleted successfully",
       });
@@ -113,6 +184,7 @@ const deleteComment = async (req, res) => {
       });
     }
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ message: "Internal Server Error", err });
   }
 };

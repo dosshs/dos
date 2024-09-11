@@ -38,7 +38,7 @@ router.get("/like/count", likeController.getPostLikeCount);
 router.post("/comment", commentController.commentPost);
 
 //Delete Comment
-router.delete("/comment/:commentId", commentController.deleteComment);
+router.delete("/comment/d", commentController.deleteComment);
 
 //Get Post Comment count
 router.get("/comment/count", commentController.getPostCommentCount);
