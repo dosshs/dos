@@ -79,17 +79,25 @@ const likePost = async (req, res) => {
 };
 
 const getPostLikeCount = async (req, res) => {
-  const { postId } = req.params;
+  const { postId, postCommentId, postReplyId } = req.query;
   try {
-    const post = await Post.findById(postId);
+    let likeCount;
+    if (postId) likeCount = await Post.findById(postId);
+    else if (postCommentId)
+      likeCount = await PostComment.findById(postCommentId);
+    else if (postReplyId) likeCount = await PostReply.findById(postReplyId);
+    else
+      return res.status(400).json({
+        message: "Bad Request: Can't Identify Likeable",
+      });
 
-    if (!post)
+    if (!likeCount)
       return res.status(404).json({
-        message: "Post not found",
+        message: "Count could not be found",
       });
 
     return res.status(200).json({
-      likes: post.likes.length,
+      likes: likeCount.likes.length,
     });
   } catch (err) {
     console.error(err);

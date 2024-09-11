@@ -31,7 +31,7 @@ router.post("/like", likeController.likePost);
 router.delete("/like/unlike", likeController.unlikePost);
 
 //Get Post Likes number
-router.get("/like/count/:postId", likeController.getPostLikeCount);
+router.get("/like/count", likeController.getPostLikeCount);
 
 //Comment==============================================
 //Comment on Post
