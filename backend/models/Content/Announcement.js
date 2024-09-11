@@ -24,6 +24,8 @@ const AnnouncementSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "PostLike" }],
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "PostComment" }],
 });
 
 module.exports = mongoose.model("Announcement", AnnouncementSchema);

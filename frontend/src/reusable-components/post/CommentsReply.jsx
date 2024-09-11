@@ -73,20 +73,24 @@ function CommentsReply({
 
   const fetchLikes = async () => {
     try {
-      const likes = await axios.get(`${URL}/comment?commentId=${commentId}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const likes = await axios.get(
+        `${URL}/post/like/count/?postReplyId=${commentId}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
       setLikeCount(likes.data.likeCount);
-      const liked = likes.data.likes.some((like) => like.userId === userId);
+      if (likes.data.likeCount > 0) {
+        const liked = likes.data.likes.some((like) => like.userId === userId);
+        setIsLiked(liked);
 
-      const LikeID = likes.data.likes
-        .filter((like) => like.userId === userId)
-        .map((like) => like._id);
-
-      setIsLiked(liked);
-      setLikeId(LikeID);
+        const LikeID = likes.data.likes
+          .filter((like) => like.userId === userId)
+          .map((like) => like._id);
+        setLikeId(LikeID);
+      }
     } catch (err) {
       return console.error(err);
     }
@@ -100,11 +104,11 @@ function CommentsReply({
     try {
       if (!isLiked) {
         const likePost = {
-          commentId: commentId,
+          postReplyId: commentId,
           userId: userId,
           username: userUsername,
         };
-        const likeRes = await axios.post(`${URL}/comment`, likePost, {
+        const likeRes = await axios.post(`${URL}/post/like`, likePost, {
           headers: {
             Authorization: token,
           },
@@ -113,11 +117,14 @@ function CommentsReply({
         setIsLiked(!isLiked);
         setLikeCount(likeCount + 1);
       } else {
-        await axios.delete(`${URL}/comment?likeId=${likeId}`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        await axios.delete(
+          `${URL}/post/like/unlike?postReplyId=${commentId}&userId=${userId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
         setLikeId(null);
         setIsLiked(!isLiked);
         setLikeCount(likeCount - 1);

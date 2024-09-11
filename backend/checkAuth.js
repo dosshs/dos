@@ -15,7 +15,9 @@ const verifyToken = async (req, res, next) => {
     token: token,
   });
   if (invalidToken)
-    return res.status(401).json({ message: "Access denied. Token Expired." });
+    return res
+      .status(401)
+      .json({ message: "Access denied. Token has Expired." });
 
   try {
     const decoded = jwt.verify(token, KEY);

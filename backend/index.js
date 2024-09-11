@@ -48,7 +48,7 @@ app.use("/api/notification", auth, notificationRoute);
 //Content
 app.use("/api/article", articleRoute);
 //Protected User route
-app.use("/api/post", auth, postRoute);
+app.use("/api/post", postRoute);
 app.use("/api/announcement", auth, announcementRoute);
 app.use("/api/feedback", auth, feedbackRoute);
 // app.use("/api/comment", auth, commentRoute);

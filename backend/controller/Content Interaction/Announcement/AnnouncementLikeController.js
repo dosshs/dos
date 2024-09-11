@@ -1,27 +1,72 @@
 const AnnouncementLike = require("../../../models/Content Interaction/Announcement/AnnouncementLike");
+const Announcement = require("../../../models/Content/Announcement");
+const AnnouncementComment = require("../../../models/Content Interaction/Announcement/AnnouncementComment");
+const AnnouncementReply = require("../../../models/Content Interaction/Announcement/AnnouncementReply");
 
 const likeAnnouncement = async (req, res) => {
-  const { announcementId, userId, username } = req.body;
+  const { userId, announcementId, announcementCommentId, announcementReplyId } =
+    req.body;
 
-  const liked = await AnnouncementLike.findOne({
-    announcementId: announcementId,
-    userId: userId,
-    username: username,
-  });
+  let likeableId, likeableModel;
+  // Determine the likeable item and model based on request parameters
+  if (announcementId) {
+    likeableId = announcementId;
+    likeableModel = "Announcement";
+  } else if (announcementCommentId) {
+    likeableId = announcementCommentId;
+    likeableModel = "AnnouncementComment";
+  } else if (announcementReplyId) {
+    likeableId = announcementReplyId;
+    likeableModel = "AnnouncementReply";
+  } else {
+    // Handle invalid request parameters
+    return res.status(400).json({ message: "Invalid request parameters" });
+  }
 
-  if (liked)
-    return res.status(302).json({
-      message: "Announcement already liked",
-      liked,
+  try {
+    const existingLike = await AnnouncementLike.findOne({
+      userId: userId,
+      likeable: likeableId,
     });
 
-  const like = new AnnouncementLike({
-    announcementId,
-    userId,
-    username,
-  });
-  try {
+    if (existingLike)
+      return res.status(200).json({
+        message: "Announcement already liked",
+        existingLike,
+      });
+
+    const like = new AnnouncementLike({
+      userId: userId,
+      likeable: likeableId,
+      likeableModel: likeableModel,
+    });
+
+    let updatedModel;
     await like.save();
+
+    if (announcementId) {
+      updatedModel = await Announcement.findByIdAndUpdate(
+        likeableId,
+        { $push: { likes: like._id } }, // Increment the likes field by 1
+        { new: true }
+      );
+    } else if (announcementCommentId) {
+      updatedModel = await AnnouncementComment.findByIdAndUpdate(
+        likeableId,
+        { $push: { likes: like._id } }, // Increment the likes field by 1
+        { new: true }
+      );
+    } else if (announcementReplyId) {
+      updatedModel = await AnnouncementReply.findByIdAndUpdate(
+        likeableId,
+        { $push: { likes: like._id } }, // Increment the likes field by 1
+        { new: true }
+      );
+    }
+
+    if (!updatedModel) {
+      return res.status(404).json({ message: `${likeableModel} not found!` });
+    }
 
     return res.status(200).json({
       message: "Announcement Liked Successfully",
@@ -34,13 +79,68 @@ const likeAnnouncement = async (req, res) => {
 };
 
 const getAnnouncementLikeCount = async (req, res) => {
-  const { announcementId } = req.params;
+  const { announcementId, announcementCommentId, announcementReplyId } =
+    req.query;
   try {
-    const likeCount = await AnnouncementLike.find({ announcementId });
+    let announcementLike,
+      likes = [];
+    if (announcementId) {
+      announcementLike = await Announcement.findById(announcementId);
+
+      if (!announcementLike)
+        return res.status(404).json({
+          message: "Announcement does not have likes",
+        });
+
+      likes = await Promise.all(
+        announcementLike.likes.map(async (id) => {
+          const like = await AnnouncementLike.findById(id);
+          return like;
+        })
+      );
+    } else if (announcementCommentId) {
+      announcementLike = await AnnouncementComment.findById(
+        announcementCommentId
+      );
+
+      if (!announcementLike)
+        return res.status(404).json({
+          message: "Announcement Comment does not have likes",
+        });
+
+      likes = await Promise.all(
+        announcementLike.likes.map(async (id) => {
+          const like = await AnnouncementLike.findById(id);
+          return like;
+        })
+      );
+    } else if (announcementReplyId) {
+      announcementLike = await AnnouncementReply.findById(announcementReplyId);
+
+      if (!announcementLike)
+        return res.status(404).json({
+          message: "Announcement Reply does not have likes",
+        });
+
+      likes = await Promise.all(
+        announcementLike.likes.map(async (id) => {
+          const like = await AnnouncementLike.findById(id);
+          return like;
+        })
+      );
+    } else
+      return res.status(400).json({
+        message: "Bad Request: Can't Identify Likeable",
+      });
+
+    if (!announcementLike)
+      return res.status(404).json({
+        message: "Count could not be found",
+      });
 
     return res.status(200).json({
-      likeCount: likeCount.length,
-      likes: likeCount,
+      likeCount: announcementLike.likes.length,
+      likes,
     });
   } catch (err) {
     console.error(err);
@@ -49,12 +149,65 @@ const getAnnouncementLikeCount = async (req, res) => {
 };
 
 const unlikeAnnouncement = async (req, res) => {
-  const { likeId } = req.params;
+  const { userId, announcementId, announcementCommentId, announcementReplyId } =
+    req.body;
+
+  let likeableId, likeableModel;
+  // Determine the likeable item and model based on request parameters
+  if (announcementId) {
+    likeableId = announcementId;
+    likeableModel = "Announcement";
+  } else if (announcementCommentId) {
+    likeableId = announcementCommentId;
+    likeableModel = "AnnouncementComment";
+  } else if (announcementReplyId) {
+    likeableId = announcementReplyId;
+    likeableModel = "AnnouncementReply";
+  } else {
+    // Handle invalid request parameters
+    return res.status(400).json({ message: "Invalid request parameters" });
+  }
+
   try {
-    await AnnouncementLike.findByIdAndDelete(likeId);
+    const existingLike = await AnnouncementLike.findOne({
+      userId: userId,
+      likeable: likeableId,
+    });
+
+    if (!existingLike) {
+      return res.status(400).json({ message: "Announcement is not liked" });
+    }
+
+    await AnnouncementLike.findByIdAndDelete(existingLike._id);
+
+    let updatedModel;
+
+    if (announcementId) {
+      updatedModel = await Announcement.findByIdAndUpdate(
+        likeableId,
+        { $pull: { likes: existingLike._id } },
+        { new: true }
+      );
+    } else if (announcementCommentId) {
+      updatedModel = await AnnouncementComment.findByIdAndUpdate(
+        likeableId,
+        { $pull: { likes: existingLike._id } },
+        { new: true }
+      );
+    } else if (announcementReplyId) {
+      updatedModel = await AnnouncementReply.findByIdAndUpdate(
+        likeableId,
+        { $pull: { likes: existingLike._id } },
+        { new: true }
+      );
+    }
+
+    if (!updatedModel) {
+      return res.status(404).json({ message: `${likeableModel} not found!` });
+    }
 
     return res.status(200).json({
-      message: "Unliked Post successfully",
+      message: "Unliked Announcement successfully",
     });
   } catch (err) {
     console.error(err);

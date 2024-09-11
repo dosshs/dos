@@ -6,31 +6,41 @@ const PostReply = require("../../../models/Content Interaction/Post/PostReply");
 const likePost = async (req, res) => {
   const { userId, postId, postCommentId, postReplyId } = req.body;
 
-  let likeableId, likeableModel;
-  // Determine the likeable item and model based on request parameters
-  if (postId) {
-    likeableId = postId;
-    likeableModel = "Post";
-  } else if (postCommentId) {
-    likeableId = postCommentId;
-    likeableModel = "PostComment";
-  } else if (postReplyId) {
-    likeableId = postReplyId;
-    likeableModel = "PostReply";
-  } else {
-    // Handle invalid request parameters
-    return res.status(400).json({ message: "Invalid request parameters" });
-  }
-
   try {
-    const existingLike = await PostLike.findOne({
-      userId: userId,
-      likeable: likeableId,
-    });
+    // Determine the likeable item and model based on request parameters
+    let likeableId, likeableModel, existingLike;
+    if (postId) {
+      likeableId = postId;
+      likeableModel = "Post";
+
+      existingLike = await PostLike.findOne({
+        userId: userId,
+        likeable: likeableId,
+      });
+    } else if (postCommentId) {
+      likeableId = postCommentId;
+      likeableModel = "PostComment";
+
+      existingLike = await PostComment.findOne({
+        userId: userId,
+        likeable: likeableId,
+      });
+    } else if (postReplyId) {
+      likeableId = postReplyId;
+      likeableModel = "PostReply";
+
+      existingLike = await PostComment.findOne({
+        userId: userId,
+        likeable: likeableId,
+      });
+    } else {
+      // Handle invalid request parameters
+      return res.status(400).json({ message: "Invalid request parameters" });
+    }
 
     if (existingLike)
       return res.status(200).json({
-        message: "Post already liked",
+        message: `${likeableModel} already liked`,
         existingLike,
       });
 
@@ -66,7 +76,6 @@ const likePost = async (req, res) => {
     if (!updatedModel) {
       return res.status(404).json({ message: `${likeableModel} not found!` });
     }
-    console.log(updatedModel);
 
     return res.status(200).json({
       message: "Post Liked Successfully",
@@ -81,23 +90,63 @@ const likePost = async (req, res) => {
 const getPostLikeCount = async (req, res) => {
   const { postId, postCommentId, postReplyId } = req.query;
   try {
-    let likeCount;
-    if (postId) likeCount = await Post.findById(postId);
-    else if (postCommentId)
-      likeCount = await PostComment.findById(postCommentId);
-    else if (postReplyId) likeCount = await PostReply.findById(postReplyId);
-    else
+    let postLike,
+      likes = [];
+    if (postId) {
+      postLike = await Post.findById(postId);
+
+      if (!postLike)
+        return res.status(404).json({
+          message: "Post does not have likes",
+        });
+
+      likes = await Promise.all(
+        postLike.likes.map(async (id) => {
+          const like = await PostLike.findById(id);
+          return like;
+        })
+      );
+    } else if (postCommentId) {
+      postLike = await PostComment.findById(postCommentId);
+
+      if (!postLike)
+        return res.status(404).json({
+          message: "Post Comment does not have likes",
+        });
+
+      likes = await Promise.all(
+        postLike.likes.map(async (id) => {
+          const like = await PostLike.findById(id);
+          return like;
+        })
+      );
+    } else if (postReplyId) {
+      postLike = await PostReply.findById(postReplyId);
+
+      if (!postLike)
+        return res.status(404).json({
+          message: "Post Reply not have likes",
+        });
+
+      likes = await Promise.all(
+        postLike.likes.map(async (id) => {
+          const like = await PostLike.findById(id);
+          return like;
+        })
+      );
+    } else
       return res.status(400).json({
         message: "Bad Request: Can't Identify Likeable",
       });
 
-    if (!likeCount)
+    if (!postLike)
       return res.status(404).json({
         message: "Count could not be found",
       });
 
     return res.status(200).json({
-      likes: likeCount.likes.length,
+      likeCount: postLike.likes.length,
+      likes: likes,
     });
   } catch (err) {
     console.error(err);
@@ -106,7 +155,7 @@ const getPostLikeCount = async (req, res) => {
 };
 
 const unlikePost = async (req, res) => {
-  const { userId, postId, postCommentId, postReplyId } = req.body;
+  const { userId, postId, postCommentId, postReplyId } = req.query;
 
   let likeableId, likeableModel;
   // Determine the likeable item and model based on request parameters

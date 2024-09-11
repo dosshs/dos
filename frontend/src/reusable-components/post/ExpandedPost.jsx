@@ -59,11 +59,14 @@ export default function ExpandedPost({
         setIsLiked(!isLiked);
         setlikeCounts(likeCounts + 1);
       } else {
-        await axios.delete(`${URL}/post/like/${postLikeId}`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        await axios.delete(
+          `${URL}/post/like/unlike?postId=${postId}&userId=${userUserId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
         setLikeId(null);
         onLike(null);
         setIsLiked(!isLiked);

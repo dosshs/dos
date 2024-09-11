@@ -75,33 +75,37 @@ const getPostComments = async (req, res) => {
     let comments = [];
     if (postId) {
       const post = await Post.findById(postId);
+
+      if (!post)
+        return res.status(404).json({
+          message: "Post does not have comments",
+        });
+
       comments = await Promise.all(
         post.comments.map(async (id) => {
           const comment = await PostComment.findById(id);
-          console.log(comment);
           return comment;
         })
       );
-    } else if (postId) {
+    } else if (postCommentId) {
       const postComment = await PostComment.findById(postCommentId);
+
+      if (!postComment)
+        return res.status(404).json({
+          message: "Comment does not have replies",
+        });
+
       comments = await Promise.all(
         postComment.comments.map(async (id) => {
-          const comment = await PostComment.findById(id);
-          console.log(comment);
+          const comment = await PostReply.findById(id);
           return comment;
         })
       );
     }
 
-    if (comments.length > 0) {
-      return res.status(200).json({
-        comments,
-      });
-    } else {
-      return res.status(404).json({
-        message: "Post does not have comments or Post does not exist",
-      });
-    }
+    return res.status(200).json({
+      comments,
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal Server Error", err });

@@ -7,7 +7,13 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { URL } from "../../../App";
 
-export default function Announcements({ fullname, username, userId, section, admin }) {
+export default function Announcements({
+  fullname,
+  username,
+  userId,
+  section,
+  admin,
+}) {
   const token = Cookies.get("token");
   const userUserId = Cookies.get("userId");
   const [announcements, setAnnouncements] = useState([]);
@@ -25,7 +31,7 @@ export default function Announcements({ fullname, username, userId, section, adm
 
       const getLikesPromises = announcement.data.map(async (announcement) => {
         const likeCountResponse = await axios.get(
-          `${URL}/announcement/like/count/${announcement._id}`,
+          `${URL}/announcement/like/count/?announcementId=${announcement._id}`,
           {
             headers: {
               Authorization: token,
@@ -76,9 +82,9 @@ export default function Announcements({ fullname, username, userId, section, adm
 
   const setStrandandClass = () => {
     if (section === 1 || section === 2) {
-      setStrand(3)
+      setStrand(3);
     } else if (section >= 3 && section <= 13) {
-      setStrand(6)
+      setStrand(6);
     } else if (section >= 14 && section <= 22) {
       setStrand(18);
     } else if (section === 23 || section === 24) {
@@ -86,15 +92,15 @@ export default function Announcements({ fullname, username, userId, section, adm
     }
 
     if (section === 1) {
-      setClassSection(4)
+      setClassSection(4);
     } else if (section === 2) {
-      setClassSection(5)
+      setClassSection(5);
     } else if (section === 3) {
-      setClassSection(7)
+      setClassSection(7);
     } else if (section === 4) {
-      setClassSection(8)
+      setClassSection(8);
     } else if (section === 5) {
-      setClassSection(9)
+      setClassSection(9);
     } else if (section === 6) {
       setClassSection(10);
     } else if (section === 7) {
@@ -141,7 +147,7 @@ export default function Announcements({ fullname, username, userId, section, adm
   }, []);
 
   useEffect(() => {
-    if(section !== 0) setStrandandClass();
+    if (section !== 0) setStrandandClass();
   }, [section]);
 
   return (
@@ -171,25 +177,34 @@ export default function Announcements({ fullname, username, userId, section, adm
               {announcements.length === 0 ? (
                 <AnnouncementSkeleton cards={2} />
               ) : (
-                announcements.filter((announce) => announce.category === 0 || announce.category === 1 || announce.category === 2 || announce.category === strand || announce.category === classSection).map((el) => (
-                  <Announce
-                    key={el._id}
-                    userUsername={username}
-                    userUserId={userId}
-                    userFullName={fullname}
-                    announceId={el._id}
-                    fullname={el.fullname}
-                    username={el.username}
-                    content={el.content}
-                    date={el.dateCreated}
-                    liked={el.liked}
-                    likeCount={el.likeCount}
-                    likeId={el.likeId}
-                    commentCount={el.commentCount}
-                    isInDosAnnounce={true}
-                    category={el.category}
-                  />
-                ))
+                announcements
+                  .filter(
+                    (announce) =>
+                      announce.category === 0 ||
+                      announce.category === 1 ||
+                      announce.category === 2 ||
+                      announce.category === strand ||
+                      announce.category === classSection
+                  )
+                  .map((el) => (
+                    <Announce
+                      key={el._id}
+                      userUsername={username}
+                      userUserId={userId}
+                      userFullName={fullname}
+                      announceId={el._id}
+                      fullname={el.fullname}
+                      username={el.username}
+                      content={el.content}
+                      date={el.dateCreated}
+                      liked={el.liked}
+                      likeCount={el.likeCount}
+                      likeId={el.likeId}
+                      commentCount={el.commentCount}
+                      isInDosAnnounce={true}
+                      category={el.category}
+                    />
+                  ))
               )}
             </div>
           </div>
@@ -206,7 +221,6 @@ export default function Announcements({ fullname, username, userId, section, adm
           onModalClose={() => {
             setIsCreateAnnounceOpen(!isCreateAnnounceOpen);
           }}
-          
         />
       )}
     </>

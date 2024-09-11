@@ -29,10 +29,7 @@ router.post("/like", likeController.likeAnnouncement);
 router.delete("/like/:likeId", likeController.unlikeAnnouncement);
 
 //Get Announcement Likes number
-router.get(
-  "/like/count/:announcementId",
-  likeController.getAnnouncementLikeCount
-);
+router.get("/like/count", likeController.getAnnouncementLikeCount);
 
 //Comment==============================================
 //Comment on Announcement

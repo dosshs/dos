@@ -37,7 +37,7 @@ export default function Home({ fullname, username, userId }) {
         newPosts.map(async (post) => {
           try {
             const likeCountResponse = await axios.get(
-              `${URL}/post/like/count/${post._id}`,
+              `${URL}/post/like/count/?postId=${post._id}`,
               {
                 headers: {
                   Authorization: token,
