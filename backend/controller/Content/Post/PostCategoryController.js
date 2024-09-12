@@ -2,14 +2,27 @@ const Post = require("../../../models/Content/Post");
 const PostCategory = require("../../../models/Content/PostCategory");
 
 const createCategory = async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, adminOnly } = req.body;
   let category;
 
   try {
+    const categoryFound = await PostCategory.find({
+      name: name,
+      description: description,
+    });
+
+    if (categoryFound.length > 0)
+      return res.status(400).json({
+        message: `Category "${name}" is already registered`,
+        categoryFound,
+      });
+
     category = new PostCategory({
       name,
       description,
     });
+
+    if (adminOnly) category.adminOnly = adminOnly;
 
     await category.save();
 

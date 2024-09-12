@@ -143,45 +143,65 @@ export default function Home({ fullname, username, userId }) {
             DOS is For You!
           </span>
           <span
-            className={postFilter === 0 ? "--chip active-chip" : "--chip"}
+            className={
+              postFilter === "66e2581e0df49e37167eccfe"
+                ? "--chip active-chip"
+                : "--chip"
+            }
             onClick={() => {
-              setPostFilter(0);
+              setPostFilter("66e2581e0df49e37167eccfe");
               // console.log(postFilter);
             }}
           >
             General
           </span>
           <span
-            className={postFilter === 1 ? "--chip active-chip" : "--chip"}
+            className={
+              postFilter === "66e259e9561b417005c970e0"
+                ? "--chip active-chip"
+                : "--chip"
+            }
             onClick={() => {
-              setPostFilter(1);
+              setPostFilter("66e259e9561b417005c970e0");
               // console.log(postFilter);
             }}
           >
             PUP
           </span>
           <span
-            className={postFilter === 2 ? "--chip active-chip" : "--chip"}
+            className={
+              postFilter === "66e259ff561b417005c970f1"
+                ? "--chip active-chip"
+                : "--chip"
+            }
             onClick={() => {
-              setPostFilter(2);
+              setPostFilter("66e259ff561b417005c970f1");
               // console.log(postFilter);
             }}
           >
             Question
           </span>
           <span
-            className={postFilter === 3 ? "--chip active-chip" : "--chip"}
+            className={
+              postFilter === "66e25a0d561b417005c970f4"
+                ? "--chip active-chip"
+                : "--chip"
+            }
             onClick={() => {
-              setPostFilter(3);
+              setPostFilter("66e25a0d561b417005c970f4");
               // console.log(postFilter);
             }}
           >
             Rant
           </span>
           <span
-            className={postFilter === 4 ? "--chip active-chip" : "--chip"}
+            className={
+              postFilter === "66e25a1b561b417005c970f7"
+                ? "--chip active-chip"
+                : "--chip"
+            }
             onClick={() => {
-              setPostFilter(4);
+              setPostFilter("66e25a1b561b417005c970f7");
               // console.log(postFilter);
             }}
           >

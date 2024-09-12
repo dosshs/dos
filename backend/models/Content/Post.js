@@ -17,9 +17,7 @@ const PostSchema = new mongoose.Schema({
     required: true,
     index: "text",
   },
-  postCategoryId: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "PostCategory" },
-  ],
+  category: { type: mongoose.Schema.Types.ObjectId, ref: "PostCategory" },
   isAnonymous: {
     type: Boolean,
     default: false,

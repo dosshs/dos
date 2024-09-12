@@ -180,11 +180,9 @@ export default function Announcements({
                 announcements
                   .filter(
                     (announce) =>
-                      announce.category === 0 ||
-                      announce.category === 1 ||
-                      announce.category === 2 ||
-                      announce.category === strand ||
-                      announce.category === classSection
+                      announce.category === "66e25b1634b4c8b76f3e1542" ||
+                      announce.category === "66e25b2b34b4c8b76f3e1546" ||
+                      announce.category === "66e25b3934b4c8b76f3e1549"
                   )
                   .map((el) => (
                     <Announce

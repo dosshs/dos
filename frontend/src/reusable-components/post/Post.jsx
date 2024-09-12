@@ -162,15 +162,15 @@ export default function Post({
           <div className="post-content" style={{ position: "relative" }}>
             <p className="category">
               #
-              {category === 0
+              {category === "66e2581e0df49e37167eccfe"
                 ? "General"
-                : category === 1
+                : category === "66e259e9561b417005c970e0"
                 ? "PUP"
-                : category === 2
+                : category === "66e259ff561b417005c970f1"
                 ? "Question"
-                : category === 3
+                : category === "66e25a0d561b417005c970f4"
                 ? "Rant"
-                : category === 4 && "Confession"}
+                : category === "66e25a1b561b417005c970f7" && "Confession"}
             </p>
             {postContent.split("\n").map((line, index) => (
               <p key={index} style={{ fontSize: "0.95rem" }}>

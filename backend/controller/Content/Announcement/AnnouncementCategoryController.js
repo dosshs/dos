@@ -2,14 +2,27 @@ const Announcement = require("../../../models/Content/Announcement");
 const AnnouncementCategory = require("../../../models/Content/AnnouncementCategory");
 
 const createCategory = async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, adminOnly } = req.body;
   let category;
 
   try {
+    const categoryFound = await AnnouncementCategory.find({
+      name: name,
+      description: description,
+    });
+
+    if (categoryFound.length > 0)
+      return res.status(400).json({
+        message: `Category "${name}" is already registered`,
+        categoryFound,
+      });
+
     category = new AnnouncementCategory({
       name,
       description,
     });
+
+    if (adminOnly) category.adminOnly = adminOnly;
 
     await category.save();
 

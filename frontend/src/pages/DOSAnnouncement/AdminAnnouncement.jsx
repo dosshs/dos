@@ -22,7 +22,7 @@ export default function Announcements({ fullname, username, userId }) {
 
       const getLikesPromises = announcement.data.map(async (announcement) => {
         const likeCountResponse = await axios.get(
-          `${URL}/announcement/like/count/${announcement._id}`,
+          `${URL}/announcement/like/count/?announcementId=${announcement._id}`,
           {
             headers: {
               Authorization: token,
@@ -94,7 +94,7 @@ export default function Announcements({ fullname, username, userId }) {
                 <AnnouncementSkeleton cards={2} />
               ) : (
                 announcements
-                  .filter((el) => el.category === 0)
+                  .filter((el) => el.category === "66e25b1634b4c8b76f3e1542")
                   .map((el) => (
                     <Announce
                       key={el._id}

@@ -17,9 +17,10 @@ const AnnouncementSchema = new mongoose.Schema({
     required: true,
     index: "text",
   },
-  announcementCategoryId: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "AnnouncementCategory" },
-  ],
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "AnnouncementCategory",
+  },
   dateCreated: {
     type: Date,
     default: Date.now,

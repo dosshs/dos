@@ -9,6 +9,10 @@ const AnnouncementCategorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  adminOnly: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model(

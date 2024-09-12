@@ -30,7 +30,7 @@ function NonAdminAnnouncement({ fullname, username, userId, section, admin }) {
 
       const getLikesPromises = announcement.data.map(async (announcement) => {
         const likeCountResponse = await axios.get(
-          `${URL}/announcement/like/count/${announcement._id}`,
+          `${URL}/announcement/like/count/?announcementId=${announcement._id}`,
           {
             headers: {
               Authorization: token,
@@ -212,9 +212,9 @@ function NonAdminAnnouncement({ fullname, username, userId, section, admin }) {
     if (section !== 0) setStrandandClass();
   }, [section]);
 
-  useEffect(() => {
-    console.log(announcements.length, fetched);
-  }, [fetched]);
+  // useEffect(() => {
+  //   console.log(announcements.length, fetched);
+  // }, [fetched]);
 
   return (
     <>
@@ -287,13 +287,11 @@ function NonAdminAnnouncement({ fullname, username, userId, section, admin }) {
               <PostSkeleton cards={2} />
             ) : postFilter === 0 && fetched ? (
               announcements
-                .filter((el) => el.category !== 0)
+                .filter((el) => el.category !== "66e25b1634b4c8b76f3e1542")
                 .filter(
                   (announce) =>
-                    announce.category === 1 ||
-                    announce.category === 2 ||
-                    announce.category === strand ||
-                    announce.category === classSection
+                    announce.category === "66e25b2b34b4c8b76f3e1546" ||
+                    announce.category === "66e25b3934b4c8b76f3e1549"
                 )
                 .map((el) => (
                   <Announce
@@ -342,7 +340,9 @@ function NonAdminAnnouncement({ fullname, username, userId, section, admin }) {
                   />
                 ))
             )}
-            {announcements.filter((el) => el.category !== 0).length < 1 &&
+            {announcements.filter(
+              (el) => el.category !== "66e25b2b34b4c8b76f3e1546"
+            ).length < 1 &&
               fetched && (
                 <h2 style={{ textAlign: "center" }}>
                   Nothing announced here yet... Announce one📢!
