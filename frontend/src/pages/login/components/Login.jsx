@@ -297,23 +297,26 @@ export default function Login({}) {
           <title>DOS</title>
           <meta property="og:title" content="Login or Sign up" />
         </Helmet>
-        <div className="login-background">
-          <div className="login-page" style={{ position: "relative" }}>
+        <div className="bg-loginBg w-screen h-screen">
+          <div
+            className="flex flex-col justify-between p-2 w-10/12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl "
+            style={{ position: "relative" }}
+          >
             <div
-              className="login-form-container"
-              style={{
-                left: isInSignInPage /* && isInDesktop*/ ? 0 : "100%",
-                transform: !isInSignInPage && "translateX(-100%)",
-                position: "absolute",
-                transition: "300ms ease-out ",
-              }}
+              className="flex flex-col items-center justify-center bg-loginWhite h-[26rem] rounded-3xl p-4 pb-8 z-10 shadow-md shadow-black/30"
+              // style={{
+              //   left: isInSignInPage /* && isInDesktop*/ ? 0 : "100%",
+              //   transform: !isInSignInPage && "translateX(-100%)",
+              //   position: "absolute",
+              //   transition: "300ms ease-out ",
+              // }}
             >
-              <form className="login-form">
-                <div className="form-fields-container">
-                  <h1 className="form-header">
+              <form className="h-full w-full flex flex-col justify-between items-center text-xs">
+                <div className="w-full flex flex-col items-center space-y-3">
+                  <h1 className="text-2xl font-bold">
                     {isInSignInPage ? "Hello World!" : "Create Account"}
                   </h1>
-                  <p className="form-subheader">
+                  <p className="text-xs font-bold">
                     {isForgotPassword
                       ? "Recover your Account"
                       : isInSignInPage
@@ -321,16 +324,12 @@ export default function Login({}) {
                       : "Join DOS Now!"}
                   </p>
                   {steps === 0 ? (
+                    //LOG IN
                     <>
                       {isInSignInPage && (
                         <input
                           type="text"
-                          className="login-input --white-btn"
-                          style={{
-                            borderColor: "#4f709c",
-                            backgroundColor: "white",
-                            color: "#000",
-                          }}
+                          className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
                           value={usernameOrEmail}
                           onChange={(e) => {
                             setUsernameOrEmail(e.target.value);
@@ -343,12 +342,7 @@ export default function Login({}) {
                         <>
                           <input
                             type="text"
-                            className="login-input --white-btn"
-                            style={{
-                              borderColor: "#4f709c",
-                              backgroundColor: "white",
-                              color: "#000",
-                            }}
+                            className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
                             value={username}
                             onChange={(e) => {
                               setUsername(e.target.value);
@@ -357,12 +351,7 @@ export default function Login({}) {
                           />
                           <input
                             type="text"
-                            className="login-input --white-btn"
-                            style={{
-                              borderColor: "#4f709c",
-                              backgroundColor: "white",
-                              color: "#000",
-                            }}
+                            className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
                             value={email}
                             onChange={(e) => {
                               setEmail(e.target.value);
@@ -374,12 +363,7 @@ export default function Login({}) {
                       {!isForgotPassword && (
                         <input
                           type="password"
-                          className="login-input --white-btn"
-                          style={{
-                            borderColor: "#4f709c",
-                            backgroundColor: "white",
-                            color: "#000",
-                          }}
+                          className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
                           value={password}
                           onChange={(e) => {
                             setPassword(e.target.value);
@@ -391,12 +375,7 @@ export default function Login({}) {
                         <>
                           <input
                             type="password"
-                            className="login-input --white-btn"
-                            style={{
-                              borderColor: "#4f709c",
-                              backgroundColor: "white",
-                              color: "#000",
-                            }}
+                            className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
                             value={confirmPass}
                             onChange={(e) => {
                               setConfirmPass(e.target.value);
@@ -431,12 +410,7 @@ export default function Login({}) {
                     <>
                       <input
                         type="text"
-                        className="login-input --white-btn"
-                        style={{
-                          borderColor: "#4f709c",
-                          backgroundColor: "white",
-                          color: "#000",
-                        }}
+                        className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
                         value={firstName}
                         onChange={(e) => {
                           setFisrtName(e.target.value);
@@ -446,12 +420,7 @@ export default function Login({}) {
                       {!isInSignInPage && (
                         <input
                           type="text"
-                          className="login-input --white-btn"
-                          style={{
-                            borderColor: "#4f709c",
-                            backgroundColor: "white",
-                            color: "#000",
-                          }}
+                          className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
                           value={lastName}
                           onChange={(e) => {
                             setLastName(e.target.value);
@@ -460,7 +429,7 @@ export default function Login({}) {
                         />
                       )}
                       <select
-                        className="select login-input --white-btn"
+                        className=""
                         style={{
                           borderColor: "#4f709c",
                           backgroundColor: "white",
@@ -528,10 +497,12 @@ export default function Login({}) {
                   <div className="utils-container">
                     {isInSignInPage && (
                       <>
-                        <div>
-                          {!isForgotPassword && (
-                            <>
+                        {!isForgotPassword && (
+                          <>
+                            <label htmlFor="remember-me">
+                              {" "}
                               <input
+                                className="accent-mediumBlue"
                                 type="checkbox"
                                 name="isRememberMe"
                                 id="remember-me"
@@ -539,13 +510,14 @@ export default function Login({}) {
                                 onChange={(e) => {
                                   setIsRememberMe(e.target.checked);
                                 }}
-                              />
-                              <label htmlFor="remember-me">Remember Me</label>
-                            </>
-                          )}
-                        </div>
+                              />{" "}
+                              Remember Me
+                            </label>
+                          </>
+                        )}
+
                         <p
-                          style={{ cursor: "pointer" }}
+                          className="cursor-pointer text-mediumBlue hover:underline"
                           onClick={() => setIsForgotPassword(!isForgotPassword)}
                         >
                           {!isForgotPassword
@@ -558,63 +530,67 @@ export default function Login({}) {
                   <p className="--server-msg">{errorMsg}</p>
                   <p className="--server-success-msg">{successMsg}</p>
                 </div>
-                {isForgotPassword ? (
-                  <button className="--blue-btn" onClick={handleForgotPassword}>
-                    FIND
-                  </button>
-                ) : isInSignInPage ? (
-                  <button className="--blue-btn" onClick={handleLogInSubmit}>
-                    {loginBtnMsg}
-                  </button>
-                ) : (
-                  <button className="--blue-btn" onClick={handleSignUpSubmit}>
-                    {signUpBtnMsg}
-                  </button>
-                )}
+
+                <div className="text-mediumBlue text-xs text-center space-y-2">
+                  {isForgotPassword ? (
+                    <button
+                      className="bg-mediumBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
+                      onClick={handleForgotPassword}
+                    >
+                      FIND
+                    </button>
+                  ) : isInSignInPage ? (
+                    <button
+                      className="bg-mediumBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
+                      onClick={handleLogInSubmit}
+                    >
+                      {loginBtnMsg}
+                    </button>
+                  ) : (
+                    <button
+                      className="bg-mediumBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
+                      onClick={handleSignUpSubmit}
+                    >
+                      {signUpBtnMsg}
+                    </button>
+                  )}
+                  <div>
+                    <p className="inline-block">
+                      {isInSignInPage
+                        ? "Not yet joined with DOS?"
+                        : "Already have an account?"}{" "}
+                    </p>
+                    <button
+                      className="hover:underline"
+                      onClick={() => {
+                        setIsInSignInPage(!isInSignInPage);
+                        setSteps(0);
+                        setEmail("");
+                        setUsername("");
+                        setPassword("");
+                        setFisrtName("");
+                        setLastName("");
+                        setSection("");
+                        setCode("");
+                        setErrorMsg("");
+                      }}
+                    >
+                      {isInSignInPage ? `Create an account` : `LOG IN`}
+                    </button>
+                  </div>
+                </div>
               </form>
             </div>
-            <div
-              className="login-message-container"
-              style={{
-                right: isInSignInPage ? 0 : "100%",
-                transform: !isInSignInPage && "translateX(100%)",
-                position: "absolute",
-                transition: "300ms ease-out",
-              }}
-            >
-              <div className="message-container">
-                <h2 className="message-header">
+            <div className="relative h-[16rem] w-full p-2 rounded-3xl bg-loginBlue text-loginWhite text-xs shadow-2xl shadow-black -translate-y-4">
+              <div className="absolute bottom-3 p-4">
+                <h2 className="font-bold text-lg text-center mb-2">
                   {isInSignInPage ? "Welcome Back!" : "Welcome to DOS"}
                 </h2>
-                <p className="message-content">
+                <p className="text-justify">
                   {isInSignInPage
                     ? "DOS, a dynamic and engaging platform designed for PUPSHS Students. With a friendly interface, a safe, moderated environment, DOS is the perfect space to share your thoughts and connect with your fellow students. Whether you want to post anonymously or publicly, DOS offers a variety of ways to share your personal reflections, funny anecdotes, or motivational messages. With the ability to post announcements, DOS is also a valuable tool to help keep everyone in the loop."
                     : "New to DOS? Create an account now and experience a dynamic and engaging platform designed for PUPSHS Students. With a friendly interface, a safe, moderated environment, DOS is the perfect space to share your thoughts and connect with your fellow students. Whether you want to post anonymously or publicly, DOS offers a variety of ways to share your personal reflections, funny anecdotes, or motivational messages. With the ability to post announcements, DOS is also a valuable tool to help keep everyone in the loop. So why not join DOS today?"}
                 </p>
-              </div>
-              <div className="not-signedin-container">
-                <p className="not-signedin-container-label">
-                  {isInSignInPage
-                    ? " Not yet joined with DOS?"
-                    : "Already have an account?"}
-                </p>
-                <button
-                  className="--white-btn"
-                  onClick={() => {
-                    setIsInSignInPage(!isInSignInPage);
-                    setSteps(0);
-                    setEmail("");
-                    setUsername("");
-                    setPassword("");
-                    setFisrtName("");
-                    setLastName("");
-                    setSection("");
-                    setCode("");
-                    setErrorMsg("");
-                  }}
-                >
-                  {isInSignInPage ? " Create an account" : "LOG IN"}
-                </button>
               </div>
             </div>
           </div>
