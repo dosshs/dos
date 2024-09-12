@@ -11,7 +11,7 @@ const verifyToken = async (req, res, next) => {
       .json({ message: "Access denied. No token provided." });
   } else {
     try {
-      await jwt.verify(token, KEY);
+      jwt.verify(token, KEY);
       next();
       // req.user = decoded;
     } catch (err) {

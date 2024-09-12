@@ -1,7 +1,8 @@
 const router = require("express").Router();
-const announcementController = require("../../controller/Content/AnnouncementController");
+const announcementController = require("../../controller/Content/Announcement/AnnouncementController");
 const likeController = require("../../controller/Content Interaction/Announcement/AnnouncementLikeController");
 const commentController = require("../../controller/Content Interaction/Announcement/AnnouncementCommentController");
+const AnnouncementCategory = require("../../controller/Content/Announcement/AnnouncementCategoryController");
 
 //Get Announcements
 router.get("/", announcementController.announcement_index);
@@ -43,5 +44,17 @@ router.get("/comment/count", commentController.getAnnouncementCommentCount);
 
 //Get Announcement Comment
 router.get("/comment/c", commentController.getAnnouncementComments);
+
+//Category===============================================
+router.post("/category", AnnouncementCategory.createCategory);
+
+//Get all Reports
+router.get("/category/g", AnnouncementCategory.getCategories);
+
+//Get a Report
+router.put("/category/u", AnnouncementCategory.updateCategory);
+
+//Delete a Report
+router.delete("/category/d", AnnouncementCategory.deleteCategory);
 
 module.exports = router;

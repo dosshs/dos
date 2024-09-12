@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const postController = require("../../controller/Content/PostController");
+const postController = require("../../controller/Content/Post/PostController");
+const postCategoryController = require("../../controller/Content/Post/PostCategoryController");
 const likeController = require("../../controller/Content Interaction/Post/PostLikeController");
 const commentController = require("../../controller/Content Interaction/Post/PostCommentController");
 const reportPostController = require("../../controller/Content Interaction/ReportPostController");
@@ -58,5 +59,17 @@ router.get("/report/:reportId", reportPostController.getReport);
 
 //Delete a Report
 router.delete("/report/:reportId", reportPostController.deleteReport);
+
+//Category===============================================
+router.post("/category", postCategoryController.createCategory);
+
+//Get all Reports
+router.get("/category/g", postCategoryController.getCategories);
+
+//Get a Report
+router.put("/category/u", postCategoryController.updateCategory);
+
+//Delete a Report
+router.delete("/category/d", postCategoryController.deleteCategory);
 
 module.exports = router;
