@@ -1,7 +1,8 @@
 const router = require("express").Router();
-const postController = require("../../controller/Content/PostController");
-const likeController = require("../../controller/Content Interaction/PostLikeController");
-const commentController = require("../../controller/Content Interaction/PostCommentController");
+const postController = require("../../controller/Content/Post/PostController");
+const postCategoryController = require("../../controller/Content/Post/PostCategoryController");
+const likeController = require("../../controller/Content Interaction/Post/PostLikeController");
+const commentController = require("../../controller/Content Interaction/Post/PostCommentController");
 const reportPostController = require("../../controller/Content Interaction/ReportPostController");
 
 //Post=============================================
@@ -28,17 +29,17 @@ router.delete("/:id", postController.post_delete);
 router.post("/like", likeController.likePost);
 
 //Unlike Post
-router.delete("/like/:likeId", likeController.unlikePost);
+router.delete("/like/unlike", likeController.unlikePost);
 
 //Get Post Likes number
-router.get("/like/count/:postId", likeController.getPostLikes);
+router.get("/like/count", likeController.getPostLikeCount);
 
 //Comment==============================================
 //Comment on Post
 router.post("/comment", commentController.commentPost);
 
 //Delete Comment
-router.delete("/comment/:commentId", commentController.deleteComment);
+router.delete("/comment/d", commentController.deleteComment);
 
 //Get Post Comment count
 router.get("/comment/count", commentController.getPostCommentCount);
@@ -58,5 +59,17 @@ router.get("/report/:reportId", reportPostController.getReport);
 
 //Delete a Report
 router.delete("/report/:reportId", reportPostController.deleteReport);
+
+//Category===============================================
+router.post("/category", postCategoryController.createCategory);
+
+//Get all Reports
+router.get("/category/g", postCategoryController.getCategories);
+
+//Get a Report
+router.put("/category/u", postCategoryController.updateCategory);
+
+//Delete a Report
+router.delete("/category/d", postCategoryController.deleteCategory);
 
 module.exports = router;

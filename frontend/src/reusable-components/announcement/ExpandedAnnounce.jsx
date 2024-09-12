@@ -58,11 +58,14 @@ export default function ExpandedAnnounce({
         setIsLiked(!isLiked);
         setlikeCounts(likeCounts + 1);
       } else {
-        await axios.delete(`${URL}/announcement/like/${announceLikeId}`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        await axios.delete(
+          `${URL}/announcement/like/unlike?announcementId=${announceId}&userId=${userUserId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
         setLikeId(null);
         onLike(null);
         setIsLiked(!isLiked);
@@ -163,15 +166,11 @@ export default function ExpandedAnnounce({
           <div className="contents">
             <p className="category">
               #
-              {category === 0
+              {category === "66e25b1634b4c8b76f3e1542"
                 ? "DOS"
-                : category === 1
+                : category === "66e25b2b34b4c8b76f3e1546"
                 ? "PUP"
-                : category === 2
-                ? "SHS"
-                : category === 3
-                ? "ICT"
-                : category === 5 && "ICT 12-2"}
+                : category === "66e25b3934b4c8b76f3e1549" && "CCIS"}
             </p>
             {content.split("\n").map((line, index) => (
               <p key={index} style={{ fontSize: "0.95rem" }}>

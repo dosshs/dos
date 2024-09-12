@@ -1,10 +1,10 @@
-const User = require("../../models/User");
+const User = require("../../models/User/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Announcement = require("../../models/Content/Announcement");
-const AnnouncementComment = require("../../models/Content Interaction/AnnouncementComment");
+const AnnouncementComment = require("../../models/Content Interaction/Announcement/AnnouncementComment");
 const Post = require("../../models/Content/Post");
-const PostComment = require("../../models/Content Interaction/PostComment");
+const PostComment = require("../../models/Content Interaction/Post/PostComment");
 
 const user_get = async (req, res) => {
   const { userId, username } = req.query;

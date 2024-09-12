@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const PostSchema = new mongoose.Schema({
-  userId: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   username: {
     type: String,
     required: true,
@@ -17,11 +17,7 @@ const PostSchema = new mongoose.Schema({
     required: true,
     index: "text",
   },
-  category: {
-    type: Number,
-    enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-    default: 0,
-  },
+  category: { type: mongoose.Schema.Types.ObjectId, ref: "PostCategory" },
   isAnonymous: {
     type: Boolean,
     default: false,
@@ -30,6 +26,8 @@ const PostSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "PostLike" }],
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "PostComment" }],
 });
 
 module.exports = mongoose.model("Post", PostSchema);

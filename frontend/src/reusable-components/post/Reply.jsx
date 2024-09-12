@@ -87,11 +87,10 @@ export default function Reply({
 
   const fetchReplies = async () => {
     try {
-      const query = isPost ? "postCommentId" : "announcementCommentId";
       const path = isPost ? "post" : "announcement";
 
       const commentsRes = await axios.get(
-        `${URL}/${path}/comment/c?${query}=${commentId}`,
+        `${URL}/${path}/comment/c?${path}CommentId=${commentId}`,
         {
           headers: {
             Authorization: token,
@@ -107,11 +106,15 @@ export default function Reply({
 
   const fetchLikes = async () => {
     try {
-      const likes = await axios.get(`${URL}/comment?commentId=${commentId}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const path = isPost ? "post" : "announcement";
+      const likes = await axios.get(
+        `${URL}/${path}/like/count?${path}CommentId=${commentId}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
       setLikeCount(likes.data.likeCount);
       const liked = likes.data.likes.some((like) => like.userId === userId);
 
@@ -132,13 +135,17 @@ export default function Reply({
     setLikeInProgress(true);
 
     try {
+      const path = isPost ? "post" : "announcement";
       if (!isLiked) {
         const likePost = {
-          commentId: commentId,
           userId: userId,
           username: userUsername,
         };
-        const likeRes = await axios.post(`${URL}/comment`, likePost, {
+
+        if (isPost) likePost.postCommentId = commentId;
+        else likePost.announcementCommentId = commentId;
+
+        const likeRes = await axios.post(`${URL}/${path}/like`, likePost, {
           headers: {
             Authorization: token,
           },
@@ -147,11 +154,14 @@ export default function Reply({
         setIsLiked(!isLiked);
         setLikeCount(likeCount + 1);
       } else {
-        await axios.delete(`${URL}/comment?likeId=${likeId}`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        await axios.delete(
+          `${URL}/${path}/like/unlike?${path}CommentId=${commentId}&userId=${userId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
         setLikeId(null);
         setIsLiked(!isLiked);
         setLikeCount(likeCount - 1);
@@ -327,6 +337,7 @@ export default function Reply({
                 content={el.content}
                 date={el.dateCreated}
                 userUsername={userUsername}
+                isPost={isPost}
               />
             ))}
             {/* <CommentsReply />

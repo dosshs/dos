@@ -1,4 +1,4 @@
-const ReportPost = require("../../models/Content Interaction/ReportPost");
+const ReportPost = require("../../models/Content Interaction/Post/ReportPost");
 
 const postReportPost = async (req, res) => {
   const { userId, postId, reportCategory, reportContent } = req.body;

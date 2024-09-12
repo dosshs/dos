@@ -12,7 +12,7 @@ export default function CreatePost({
   onModalClose,
 }) {
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState(0);
+  const [category, setCategory] = useState("66e2581e0df49e37167eccfe");
   const [isPosting, setIsPosting] = useState("Post");
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [posting, setPosting] = useState(false);
@@ -103,11 +103,11 @@ export default function CreatePost({
                   setCategory(e.target.value);
                 }}
               >
-                <option value="0">General</option>
-                <option value="1">PUP</option>
-                <option value="2">Question</option>
-                <option value="3">Rant</option>
-                <option value="4">Confession</option>
+                <option value="66e2581e0df49e37167eccfe">General</option>
+                <option value="66e259e9561b417005c970e0">PUP</option>
+                <option value="66e259ff561b417005c970f1">Question</option>
+                <option value="66e25a0d561b417005c970f4">Rant</option>
+                <option value="66e25a1b561b417005c970f7">Confession</option>
               </select>
               <div className="anonymous-btn">
                 <input

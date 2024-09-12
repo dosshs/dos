@@ -59,11 +59,14 @@ export default function ExpandedPost({
         setIsLiked(!isLiked);
         setlikeCounts(likeCounts + 1);
       } else {
-        await axios.delete(`${URL}/post/like/${postLikeId}`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        await axios.delete(
+          `${URL}/post/like/unlike?postId=${postId}&userId=${userUserId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
         setLikeId(null);
         onLike(null);
         setIsLiked(!isLiked);
@@ -177,15 +180,15 @@ export default function ExpandedPost({
           <div className="contents">
             <p className="category">
               #
-              {category === 0
+              {category === "66e2581e0df49e37167eccfe"
                 ? "General"
-                : category === 1
+                : category === "66e259e9561b417005c970e0"
                 ? "PUP"
-                : category === 2
+                : category === "66e259ff561b417005c970f1"
                 ? "Question"
-                : category === 3
+                : category === "66e25a0d561b417005c970f4"
                 ? "Rant"
-                : category === 4 && "Confession"}
+                : category === "66e25a1b561b417005c970f7" && "Confession"}
             </p>
             {content.split("\n").map((line, index) => (
               <p key={index} style={{ fontSize: "0.95rem" }}>
