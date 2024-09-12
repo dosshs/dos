@@ -87,11 +87,10 @@ export default function Reply({
 
   const fetchReplies = async () => {
     try {
-      const query = isPost ? "postCommentId" : "announcementId";
       const path = isPost ? "post" : "announcement";
 
       const commentsRes = await axios.get(
-        `${URL}/${path}/comment/c?${query}=${commentId}`,
+        `${URL}/${path}/comment/c?${path}CommentId=${commentId}`,
         {
           headers: {
             Authorization: token,
@@ -139,10 +138,13 @@ export default function Reply({
       const path = isPost ? "post" : "announcement";
       if (!isLiked) {
         const likePost = {
-          postCommentId: commentId,
           userId: userId,
           username: userUsername,
         };
+
+        if (isPost) likePost.postCommentId = commentId;
+        else likePost.announcementCommentId = commentId;
+
         const likeRes = await axios.post(`${URL}/${path}/like`, likePost, {
           headers: {
             Authorization: token,
@@ -335,6 +337,7 @@ export default function Reply({
                 content={el.content}
                 date={el.dateCreated}
                 userUsername={userUsername}
+                isPost={isPost}
               />
             ))}
             {/* <CommentsReply />

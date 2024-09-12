@@ -76,7 +76,8 @@ const getAnnouncementComments = async (req, res) => {
     let comments = [];
     if (announcementId) {
       const announcement = await Announcement.findById(announcementId);
-      if (!announcementComment)
+
+      if (!announcement)
         return res.status(404).json({
           message: "Announcement does not have comments",
         });
@@ -87,33 +88,27 @@ const getAnnouncementComments = async (req, res) => {
           return comment;
         })
       );
-    } else if (announcementId) {
+    } else if (announcementCommentId) {
       const announcementComment = await AnnouncementComment.findById(
         announcementCommentId
       );
+
       if (!announcementComment)
         return res.status(404).json({
-          message: "Announcement does not have comments",
+          message: "Comment does not have replies",
         });
 
       comments = await Promise.all(
         announcementComment.comments.map(async (id) => {
-          const comment = await AnnouncementComment.findById(id);
+          const comment = await AnnouncementReply.findById(id);
           return comment;
         })
       );
     }
 
-    if (comments.length > 0) {
-      return res.status(200).json({
-        comments,
-      });
-    } else {
-      return res.status(404).json({
-        message:
-          "Announcement does not have comments or Announcement does not exist",
-      });
-    }
+    return res.status(200).json({
+      comments,
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal Server Error", err });

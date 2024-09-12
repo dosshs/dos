@@ -7,31 +7,41 @@ const likeAnnouncement = async (req, res) => {
   const { userId, announcementId, announcementCommentId, announcementReplyId } =
     req.body;
 
-  let likeableId, likeableModel;
-  // Determine the likeable item and model based on request parameters
-  if (announcementId) {
-    likeableId = announcementId;
-    likeableModel = "Announcement";
-  } else if (announcementCommentId) {
-    likeableId = announcementCommentId;
-    likeableModel = "AnnouncementComment";
-  } else if (announcementReplyId) {
-    likeableId = announcementReplyId;
-    likeableModel = "AnnouncementReply";
-  } else {
-    // Handle invalid request parameters
-    return res.status(400).json({ message: "Invalid request parameters" });
-  }
-
   try {
-    const existingLike = await AnnouncementLike.findOne({
-      userId: userId,
-      likeable: likeableId,
-    });
+    // Determine the likeable item and model based on request parameters
+    let likeableId, likeableModel, existingLike;
+    if (announcementId) {
+      likeableId = announcementId;
+      likeableModel = "Announcement";
+
+      existingLike = await AnnouncementLike.findOne({
+        userId: userId,
+        likeable: likeableId,
+      });
+    } else if (announcementCommentId) {
+      likeableId = announcementCommentId;
+      likeableModel = "AnnouncementComment";
+
+      existingLike = await AnnouncementComment.findOne({
+        userId: userId,
+        likeable: likeableId,
+      });
+    } else if (announcementReplyId) {
+      likeableId = announcementReplyId;
+      likeableModel = "AnnouncementReply";
+
+      existingLike = await AnnouncementComment.findOne({
+        userId: userId,
+        likeable: likeableId,
+      });
+    } else {
+      // Handle invalid request parameters
+      return res.status(400).json({ message: "Invalid request parameters" });
+    }
 
     if (existingLike)
       return res.status(200).json({
-        message: "Announcement already liked",
+        message: `${likeableModel} already liked`,
         existingLike,
       });
 
@@ -119,7 +129,7 @@ const getAnnouncementLikeCount = async (req, res) => {
 
       if (!announcementLike)
         return res.status(404).json({
-          message: "Announcement Reply does not have likes",
+          message: "Announcement Reply not have likes",
         });
 
       likes = await Promise.all(
@@ -140,7 +150,7 @@ const getAnnouncementLikeCount = async (req, res) => {
 
     return res.status(200).json({
       likeCount: announcementLike.likes.length,
-      likes,
+      likes: likes,
     });
   } catch (err) {
     console.error(err);
@@ -150,7 +160,7 @@ const getAnnouncementLikeCount = async (req, res) => {
 
 const unlikeAnnouncement = async (req, res) => {
   const { userId, announcementId, announcementCommentId, announcementReplyId } =
-    req.body;
+    req.query;
 
   let likeableId, likeableModel;
   // Determine the likeable item and model based on request parameters

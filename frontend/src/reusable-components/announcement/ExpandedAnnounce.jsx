@@ -58,11 +58,14 @@ export default function ExpandedAnnounce({
         setIsLiked(!isLiked);
         setlikeCounts(likeCounts + 1);
       } else {
-        await axios.delete(`${URL}/announcement/like/${announceLikeId}`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        await axios.delete(
+          `${URL}/announcement/like/unlike?announcementId=${announceId}&userId=${userUserId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
         setLikeId(null);
         onLike(null);
         setIsLiked(!isLiked);

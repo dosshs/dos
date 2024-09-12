@@ -10,6 +10,7 @@ function CommentsReply({
   date,
   commentId,
   userUsername,
+  isPost,
 }) {
   const token = Cookies.get("token");
   const userId = Cookies.get("userId");
@@ -73,8 +74,9 @@ function CommentsReply({
 
   const fetchLikes = async () => {
     try {
+      const path = isPost ? "post" : "announcement";
       const likes = await axios.get(
-        `${URL}/post/like/count/?postReplyId=${commentId}`,
+        `${URL}/${path}/like/count/?${path}ReplyId=${commentId}`,
         {
           headers: {
             Authorization: token,
@@ -102,13 +104,17 @@ function CommentsReply({
     setLikeInProgress(true);
 
     try {
+      const path = isPost ? "post" : "announcement";
       if (!isLiked) {
         const likePost = {
           postReplyId: commentId,
           userId: userId,
           username: userUsername,
         };
-        const likeRes = await axios.post(`${URL}/post/like`, likePost, {
+        isPost
+          ? (likePost.postReplyId = commentId)
+          : (likePost.announcementReplyId = commentId);
+        const likeRes = await axios.post(`${URL}/${path}/like`, likePost, {
           headers: {
             Authorization: token,
           },
@@ -118,7 +124,7 @@ function CommentsReply({
         setLikeCount(likeCount + 1);
       } else {
         await axios.delete(
-          `${URL}/post/like/unlike?postReplyId=${commentId}&userId=${userId}`,
+          `${URL}/${path}/like/unlike?${path}ReplyId=${commentId}&userId=${userId}`,
           {
             headers: {
               Authorization: token,

@@ -26,7 +26,7 @@ router.delete("/:id", announcementController.announcement_delete);
 router.post("/like", likeController.likeAnnouncement);
 
 //Unlike Announcement
-router.delete("/like/:likeId", likeController.unlikeAnnouncement);
+router.delete("/like/unlike", likeController.unlikeAnnouncement);
 
 //Get Announcement Likes number
 router.get("/like/count", likeController.getAnnouncementLikeCount);

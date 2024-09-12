@@ -57,15 +57,19 @@ export default function Announce({
             },
           }
         );
+
         setLikeId(likeRes.data.like._id);
       } else {
         setIsLiked(!isLiked);
         setlikeCounts(likeCounts - 1);
-        await axios.delete(`${URL}/announcement/like/${announceLikeId}`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        await axios.delete(
+          `${URL}/announcement/like/unlike?announcementId=${announceId}&userId=${userUserId}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
         setLikeId(null);
       }
     } catch (err) {
@@ -160,60 +164,59 @@ export default function Announce({
                 ? "SHS"
                 : category === 3
                 ? "ICT"
-                : category === 4 
-                ? "ICT 12 - 1" 
-                : category === 5 
-                ? "ICT 12 - 2" 
+                : category === 4
+                ? "ICT 12 - 1"
+                : category === 5
+                ? "ICT 12 - 2"
                 : category === 6
-                ? "STEM" 
+                ? "STEM"
                 : category === 7
-                ? "STEM 11 - 1" 
-                : category === 8 
-                ? "STEM 12 - 1" 
-                : category === 9 
-                ? "STEM 12 - 2" 
-                : category === 10 
-                ? "STEM 12 - 3" 
+                ? "STEM 11 - 1"
+                : category === 8
+                ? "STEM 12 - 1"
+                : category === 9
+                ? "STEM 12 - 2"
+                : category === 10
+                ? "STEM 12 - 3"
                 : category === 11
-                ? "STEM 12 - 4" 
+                ? "STEM 12 - 4"
                 : category === 12
-                ? "STEM 12 - 5" 
+                ? "STEM 12 - 5"
                 : category === 13
-                ? "STEM 12 - 6" 
+                ? "STEM 12 - 6"
                 : category === 14
-                ? "STEM 12 - 7" 
+                ? "STEM 12 - 7"
                 : category === 15
-                ? "STEM 12 - 8" 
+                ? "STEM 12 - 8"
                 : category === 16
-                ? "STEM 12 - 9" 
+                ? "STEM 12 - 9"
                 : category === 17
-                ? "STEM 12 - 10" 
+                ? "STEM 12 - 10"
                 : category === 18
-                ? "ABM" 
+                ? "ABM"
                 : category === 19
-                ? "ABM 11 - 1" 
+                ? "ABM 11 - 1"
                 : category === 20
-                ? "ABM 12 - 1" 
+                ? "ABM 12 - 1"
                 : category === 21
-                ? "ABM 12 - 2" 
+                ? "ABM 12 - 2"
                 : category === 22
-                ? "ABM 12 - 3" 
+                ? "ABM 12 - 3"
                 : category === 23
-                ? "ABM 12 - 4" 
+                ? "ABM 12 - 4"
                 : category === 24
-                ? "ABM 12 - 5" 
+                ? "ABM 12 - 5"
                 : category === 25
-                ? "ABM 12 - 6" 
+                ? "ABM 12 - 6"
                 : category === 26
-                ? "ABM 12 - 7" 
+                ? "ABM 12 - 7"
                 : category === 27
-                ? "ABM 12 - 8" 
+                ? "ABM 12 - 8"
                 : category === 28
-                ? "HUMSS" 
+                ? "HUMSS"
                 : category === 29
-                ? "HUMSS 12 - 1" 
-                : category === 30
-                && "HUMSS 12 - 2"}
+                ? "HUMSS 12 - 1"
+                : category === 30 && "HUMSS 12 - 2"}
             </p>
             {content.split("\n").map((line, index) => (
               <p key={index} style={{ fontSize: "0.95rem" }}>
