@@ -299,11 +299,11 @@ export default function Login({}) {
         </Helmet>
         <div className="bg-loginBg w-screen h-screen">
           <div
-            className="flex flex-col justify-between p-2 w-10/12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl "
+            className="flex flex-col justify-between p-2 w-10/12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl md:flex-row md:w-5/6 lg:w-[60rem] md:bg-loginBlue md:p-0 lg:h-[32rem]"
             style={{ position: "relative" }}
           >
             <div
-              className="flex flex-col items-center justify-center bg-loginWhite h-[26rem] rounded-3xl p-4 pb-8 z-10 shadow-md shadow-black/30"
+              className="flex flex-col items-center justify-center bg-loginWhite h-[26rem] rounded-3xl p-4 pb-8 z-10 shadow-md shadow-black/30 md:w-2/5 md:shadow-none lg:h-full"
               // style={{
               //   left: isInSignInPage /* && isInDesktop*/ ? 0 : "100%",
               //   transform: !isInSignInPage && "translateX(-100%)",
@@ -562,7 +562,8 @@ export default function Login({}) {
                     </p>
                     <button
                       className="hover:underline"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
                         setIsInSignInPage(!isInSignInPage);
                         setSteps(0);
                         setEmail("");
@@ -575,13 +576,14 @@ export default function Login({}) {
                         setErrorMsg("");
                       }}
                     >
-                      {isInSignInPage ? `Create an account` : `LOG IN`}
+                      {" "}
+                      {isInSignInPage ? `Create an account` : `Login`}
                     </button>
                   </div>
                 </div>
               </form>
             </div>
-            <div className="relative h-[16rem] w-full p-2 rounded-3xl bg-loginBlue text-loginWhite text-xs shadow-2xl shadow-black -translate-y-4">
+            <div className="relative h-[16rem] w-full p-2 rounded-3xl bg-loginBlue text-loginWhite text-xs shadow-2xl shadow-black -translate-y-4 md:translate-y-0 md:h-[26rem] md:w-3/5 md:shadow-none lg:h-full">
               <div className="absolute bottom-3 p-4">
                 <h2 className="font-bold text-lg text-center mb-2">
                   {isInSignInPage ? "Welcome Back!" : "Welcome to DOS"}
