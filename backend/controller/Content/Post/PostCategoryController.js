@@ -1,42 +1,39 @@
 const Post = require("../../../models/Content/Post");
 const PostCategory = require("../../../models/Content/PostCategory");
+const AppError = require("../../../Utilities/appError");
+const catchAsync = require("../../../Utilities/catchAsync");
 
-const createCategory = async (req, res) => {
+const createCategory = catchAsync(async (req, res) => {
   const { name, description, adminOnly } = req.body;
   let category;
 
-  try {
-    const categoryFound = await PostCategory.find({
-      name: name,
-      description: description,
+  const categoryFound = await PostCategory.find({
+    name: name,
+    description: description,
+  });
+
+  if (categoryFound.length > 0)
+    return res.status(400).json({
+      message: `Category "${name}" is already registered`,
+      categoryFound,
     });
 
-    if (categoryFound.length > 0)
-      return res.status(400).json({
-        message: `Category "${name}" is already registered`,
-        categoryFound,
-      });
+  category = new PostCategory({
+    name,
+    description,
+  });
 
-    category = new PostCategory({
-      name,
-      description,
-    });
+  if (adminOnly) category.adminOnly = adminOnly;
 
-    if (adminOnly) category.adminOnly = adminOnly;
+  await category.save();
 
-    await category.save();
+  return res.status(200).json({
+    message: "Category Added Successfully",
+    category,
+  });
+});
 
-    return res.status(200).json({
-      message: "Category Added Successfully",
-      category,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
-};
-
-const getCategories = async (req, res) => {
+const getCategories = catchAsync(async (req, res) => {
   try {
     const categories = await PostCategory.find();
 
@@ -47,9 +44,9 @@ const getCategories = async (req, res) => {
     console.error(err);
     return res.status(500).json({ message: "Internal Server Error", err });
   }
-};
+});
 
-const updateCategory = async (req, res) => {
+const updateCategory = catchAsync(async (req, res) => {
   const { name, categoryId, newName, description } = req.body;
 
   let query = {},
@@ -71,9 +68,9 @@ const updateCategory = async (req, res) => {
     console.error(err);
     return res.status(500).json({ message: "Internal Server Error", err });
   }
-};
+});
 
-const deleteCategory = async (req, res) => {
+const deleteCategory = catchAsync(async (req, res) => {
   const { name, categoryId } = req.query;
 
   let category;
@@ -99,7 +96,7 @@ const deleteCategory = async (req, res) => {
     console.error(err);
     return res.status(500).json({ message: "Internal Server Error", err });
   }
-};
+});
 
 module.exports = {
   createCategory,

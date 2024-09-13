@@ -1,55 +1,47 @@
 const Announcement = require("../../../models/Content/Announcement");
 const AnnouncementCategory = require("../../../models/Content/AnnouncementCategory");
+const AppError = require("../../../Utilities/appError");
+const catchAsync = require("../../../Utilities/catchAsync");
 
-const createCategory = async (req, res) => {
+const createCategory = catchAsync(async (req, res, next) => {
   const { name, description, adminOnly } = req.body;
   let category;
 
-  try {
-    const categoryFound = await AnnouncementCategory.find({
-      name: name,
-      description: description,
+  const categoryFound = await AnnouncementCategory.find({
+    name: name,
+    description: description,
+  });
+
+  if (categoryFound.length > 0)
+    return res.status(400).json({
+      message: `Category "${name}" is already registered`,
+      categoryFound,
     });
 
-    if (categoryFound.length > 0)
-      return res.status(400).json({
-        message: `Category "${name}" is already registered`,
-        categoryFound,
-      });
+  category = new AnnouncementCategory({
+    name,
+    description,
+  });
 
-    category = new AnnouncementCategory({
-      name,
-      description,
-    });
+  if (adminOnly) category.adminOnly = adminOnly;
 
-    if (adminOnly) category.adminOnly = adminOnly;
+  await category.save();
 
-    await category.save();
+  return res.status(200).json({
+    message: "Category Added Successfully",
+    category,
+  });
+});
 
-    return res.status(200).json({
-      message: "Category Added Successfully",
-      category,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
-};
+const getCategories = catchAsync(async (req, res, next) => {
+  const categories = await AnnouncementCategory.find();
 
-const getCategories = async (req, res) => {
-  try {
-    const categories = await AnnouncementCategory.find();
+  return res.status(200).json({
+    categories,
+  });
+});
 
-    return res.status(200).json({
-      categories,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
-};
-
-const updateCategory = async (req, res) => {
+const updateCategory = catchAsync(async (req, res, next) => {
   const { name, categoryId, newName, description } = req.body;
 
   let query = {},
@@ -57,50 +49,42 @@ const updateCategory = async (req, res) => {
   name ? (query.name = name) : (query._id = categoryId);
   if (newName) update.name = newName;
   if (description) update.description = description;
-  try {
-    const updatedCategory = await AnnouncementCategory.findOneAndUpdate(
-      query,
-      { $set: update },
-      { new: true }
-    );
-    return res.status(200).json({
-      query,
-      updatedCategory,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
-};
 
-const deleteCategory = async (req, res) => {
+  const updatedCategory = await AnnouncementCategory.findOneAndUpdate(
+    query,
+    { $set: update },
+    { new: true }
+  );
+  return res.status(200).json({
+    query,
+    updatedCategory,
+  });
+});
+
+const deleteCategory = catchAsync(async (req, res, next) => {
   const { name, categoryId } = req.query;
 
   let category;
-  try {
-    if (name)
-      category = await AnnouncementCategory.findOneAndDelete({ name: name });
-    else if (categoryId)
-      category = await AnnouncementCategory.findByIdAndDelete(categoryId);
-    else
-      return res.status(400).json({
-        message: "No category identifier",
-      });
 
-    if (!category)
-      return res.status(200).json({
-        message: "Category not found",
-      });
-
-    return res.status(200).json({
-      message: "Category deleted successfully",
-      category,
+  if (name)
+    category = await AnnouncementCategory.findOneAndDelete({ name: name });
+  else if (categoryId)
+    category = await AnnouncementCategory.findByIdAndDelete(categoryId);
+  else
+    return res.status(400).json({
+      message: "No category identifier",
     });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
-};
+
+  if (!category)
+    return res.status(200).json({
+      message: "Category not found",
+    });
+
+  return res.status(200).json({
+    message: "Category deleted successfully",
+    category,
+  });
+});
 
 module.exports = {
   createCategory,

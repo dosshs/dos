@@ -1,19 +1,18 @@
-const alive = async (res) => {
+const AppError = require("../../../Utilities/appError");
+const catchAsync = require("../../../Utilities/catchAsync");
+
+const alive = catchAsync(async (res, nxet) => {
   const timestamp = Date.now();
 
   const date = new Date(timestamp);
   const formattedDate = date.toLocaleString();
-  try {
-    return res.status(200).json({ message: "I AM ALIVE", Date: formattedDate });
-  } catch (err) {
-    console.error("I AM DEAD", formattedDate);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
-};
 
-const verified = (req, res) => {
+  return res.status(200).json({ message: "I AM ALIVE", Date: formattedDate });
+});
+
+const verified = catchAsync(async (req, res) => {
   return res.status(200).json({ message: "Token Valid" });
-};
+});
 
 module.exports = {
   alive,
