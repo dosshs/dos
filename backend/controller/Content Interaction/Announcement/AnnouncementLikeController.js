@@ -37,7 +37,7 @@ const likeAnnouncement = catchAsync(async (req, res, next) => {
     });
   } else {
     // Handle invalid request parameters
-    return res.status(400).json({ message: "Invalid request parameters" });
+    return next(new AppError("Invalid request parameters", 400));
   }
 
   if (existingLike)
@@ -76,7 +76,7 @@ const likeAnnouncement = catchAsync(async (req, res, next) => {
   }
 
   if (!updatedModel) {
-    return res.status(404).json({ message: `${likeableModel} not found!` });
+    return next(new AppError(`${likeableModel} not found!`, 404));
   }
 
   return res.status(200).json({
@@ -95,7 +95,7 @@ const getAnnouncementLikeCount = catchAsync(async (req, res, next) => {
     announcementLike = await Announcement.findById(announcementId);
 
     if (!announcementLike)
-      return res.status(404).json({
+      return res.status(200).json({
         message: "Announcement does not have likes",
       });
 
@@ -111,7 +111,7 @@ const getAnnouncementLikeCount = catchAsync(async (req, res, next) => {
     );
 
     if (!announcementLike)
-      return res.status(404).json({
+      return res.status(200).json({
         message: "Announcement Comment does not have likes",
       });
 
@@ -125,7 +125,7 @@ const getAnnouncementLikeCount = catchAsync(async (req, res, next) => {
     announcementLike = await AnnouncementReply.findById(announcementReplyId);
 
     if (!announcementLike)
-      return res.status(404).json({
+      return res.status(200).json({
         message: "Announcement Reply not have likes",
       });
 
@@ -135,15 +135,10 @@ const getAnnouncementLikeCount = catchAsync(async (req, res, next) => {
         return like;
       })
     );
-  } else
-    return res.status(400).json({
-      message: "Bad Request: Can't Identify Likeable",
-    });
+  } else return next(new AppError("Bad Request: Can't Identify Likeable", 400));
 
   if (!announcementLike)
-    return res.status(404).json({
-      message: "Count could not be found",
-    });
+    return next(new AppError("Count could not be found", 404));
 
   return res.status(200).json({
     likeCount: announcementLike.likes.length,
@@ -168,7 +163,7 @@ const unlikeAnnouncement = catchAsync(async (req, res, next) => {
     likeableModel = "AnnouncementReply";
   } else {
     // Handle invalid request parameters
-    return res.status(400).json({ message: "Invalid request parameters" });
+    return next(new AppError("Invalid request parameters", 400));
   }
 
   const existingLike = await AnnouncementLike.findOne({
@@ -177,7 +172,7 @@ const unlikeAnnouncement = catchAsync(async (req, res, next) => {
   });
 
   if (!existingLike) {
-    return res.status(400).json({ message: "Announcement is not liked" });
+    return res.status(200).json({ message: "Announcement is not liked" });
   }
 
   await AnnouncementLike.findByIdAndDelete(existingLike._id);
@@ -205,7 +200,7 @@ const unlikeAnnouncement = catchAsync(async (req, res, next) => {
   }
 
   if (!updatedModel) {
-    return res.status(404).json({ message: `${likeableModel} not found!` });
+    return next(new AppError(`${likeableModel} not found!`, 404));
   }
 
   return res.status(200).json({

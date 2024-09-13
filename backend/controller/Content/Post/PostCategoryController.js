@@ -3,7 +3,7 @@ const PostCategory = require("../../../models/Content/PostCategory");
 const AppError = require("../../../Utilities/appError");
 const catchAsync = require("../../../Utilities/catchAsync");
 
-const createCategory = catchAsync(async (req, res) => {
+const createCategory = catchAsync(async (req, res, next) => {
   const { name, description, adminOnly } = req.body;
   let category;
 
@@ -33,20 +33,15 @@ const createCategory = catchAsync(async (req, res) => {
   });
 });
 
-const getCategories = catchAsync(async (req, res) => {
-  try {
-    const categories = await PostCategory.find();
+const getCategories = catchAsync(async (req, res, next) => {
+  const categories = await PostCategory.find();
 
-    return res.status(200).json({
-      categories,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
+  return res.status(200).json({
+    categories,
+  });
 });
 
-const updateCategory = catchAsync(async (req, res) => {
+const updateCategory = catchAsync(async (req, res, next) => {
   const { name, categoryId, newName, description } = req.body;
 
   let query = {},
@@ -54,48 +49,35 @@ const updateCategory = catchAsync(async (req, res) => {
   name ? (query.name = name) : (query._id = categoryId);
   if (newName) update.name = newName;
   if (description) update.description = description;
-  try {
-    const updatedCategory = await PostCategory.findOneAndUpdate(
-      query,
-      { $set: update },
-      { new: true }
-    );
-    return res.status(200).json({
-      query,
-      updatedCategory,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
+
+  const updatedCategory = await PostCategory.findOneAndUpdate(
+    query,
+    { $set: update },
+    { new: true }
+  );
+  
+  return res.status(200).json({
+    query,
+    updatedCategory,
+  });
 });
 
-const deleteCategory = catchAsync(async (req, res) => {
+const deleteCategory = catchAsync(async (req, res, next) => {
   const { name, categoryId } = req.query;
 
   let category;
-  try {
-    if (name) category = await PostCategory.findOneAndDelete({ name: name });
-    else if (categoryId)
-      category = await PostCategory.findByIdAndDelete(categoryId);
-    else
-      return res.status(400).json({
-        message: "No category identifier",
-      });
 
-    if (!category)
-      return res.status(200).json({
-        message: "Category not found",
-      });
+  if (name) category = await PostCategory.findOneAndDelete({ name: name });
+  else if (categoryId)
+    category = await PostCategory.findByIdAndDelete(categoryId);
+  else return next(new AppError("No category identifier", 400));
 
-    return res.status(200).json({
-      message: "Category deleted successfully",
-      category,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
+  if (!category) return next(new AppError("Category not found", 404));
+
+  return res.status(200).json({
+    message: "Category deleted successfully",
+    category,
+  });
 });
 
 module.exports = {

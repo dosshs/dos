@@ -36,7 +36,7 @@ const likePost = catchAsync(async (req, res, next) => {
     });
   } else {
     // Handle invalid request parameters
-    return res.status(400).json({ message: "Invalid request parameters" });
+    return next(new AppError("Invalid request parameters", 400));
   }
 
   if (existingLike)
@@ -75,7 +75,7 @@ const likePost = catchAsync(async (req, res, next) => {
   }
 
   if (!updatedModel) {
-    return res.status(404).json({ message: `${likeableModel} not found!` });
+    return next(new AppError("`${likeableModel} not found!`", 404));
   }
 
   return res.status(200).json({
@@ -93,7 +93,7 @@ const getPostLikeCount = catchAsync(async (req, res, next) => {
     postLike = await Post.findById(postId);
 
     if (!postLike)
-      return res.status(404).json({
+      return res.status(200).json({
         message: "Post does not have likes",
       });
 
@@ -107,7 +107,7 @@ const getPostLikeCount = catchAsync(async (req, res, next) => {
     postLike = await PostComment.findById(postCommentId);
 
     if (!postLike)
-      return res.status(404).json({
+      return res.status(200).json({
         message: "Post Comment does not have likes",
       });
 
@@ -121,7 +121,7 @@ const getPostLikeCount = catchAsync(async (req, res, next) => {
     postLike = await PostReply.findById(postReplyId);
 
     if (!postLike)
-      return res.status(404).json({
+      return res.status(200).json({
         message: "Post Reply not have likes",
       });
 
@@ -131,15 +131,10 @@ const getPostLikeCount = catchAsync(async (req, res, next) => {
         return like;
       })
     );
-  } else
-    return res.status(400).json({
-      message: "Bad Request: Can't Identify Likeable",
-    });
+  } else return next(new AppError("Bad Request: Can't Identify Likeable", 400));
 
   if (!postLike)
-    return res.status(404).json({
-      message: "Count could not be found",
-    });
+    return next(new AppError("Post Like count could not be found", 404));
 
   return res.status(200).json({
     likeCount: postLike.likes.length,
@@ -163,7 +158,7 @@ const unlikePost = catchAsync(async (req, res, next) => {
     likeableModel = "PostReply";
   } else {
     // Handle invalid request parameters
-    return res.status(400).json({ message: "Invalid request parameters" });
+    return next(new AppError("Invalid request parameters", 400));
   }
 
   const existingLike = await PostLike.findOne({
@@ -172,7 +167,7 @@ const unlikePost = catchAsync(async (req, res, next) => {
   });
 
   if (!existingLike) {
-    return res.status(400).json({ message: "Post is not liked" });
+    return res.status(200).json({ message: "Post is not liked" });
   }
 
   await PostLike.findByIdAndDelete(existingLike._id);
@@ -200,7 +195,7 @@ const unlikePost = catchAsync(async (req, res, next) => {
   }
 
   if (!updatedModel) {
-    return res.status(404).json({ message: `${likeableModel} not found!` });
+    return next(new AppError(`${likeableModel} not found!`, 404));
   }
 
   return res.status(200).json({

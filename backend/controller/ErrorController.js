@@ -34,7 +34,7 @@ const sendErrorProd = (err, res) => {
     console.error("ERROR 💥", err);
 
     //Send message to client
-    res.status(500).json({
+    return res.status(500).json({
       status: "error",
       message: "Something went very wrong!",
     });

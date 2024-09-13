@@ -1,6 +1,6 @@
 const ReportPost = require("../../models/Content Interaction/Post/ReportPost");
-const AppError = require("../../../Utilities/appError");
-const catchAsync = require("../../../Utilities/catchAsync");
+const AppError = require("../../Utilities/appError");
+const catchAsync = require("../../Utilities/catchAsync");
 
 const postReportPost = catchAsync(async (req, res, next) => {
   const { userId, postId, reportCategory, reportContent } = req.body;
@@ -29,9 +29,9 @@ const getReport = catchAsync(async (req, res, next) => {
       report,
     });
   } else {
-    return res.status(404).json({
-      message: "Report does not exist or already have been solved.",
-    });
+    return next(
+      new AppError("Report does not exist or already have been solved.", 404)
+    );
   }
 });
 
@@ -43,9 +43,7 @@ const getReports = catchAsync(async (req, res, next) => {
       reports,
     });
   } else {
-    return res.status(404).json({
-      message: "No reports found.",
-    });
+    return next(new AppError("No Reports Found.", 404));
   }
 });
 
@@ -59,9 +57,7 @@ const deleteReport = catchAsync(async (req, res, next) => {
       message: "Report deleted successfully",
     });
   } else {
-    return res.status(404).json({
-      message: "Report does not exist",
-    });
+    return next(new AppError("Report does not exist", 404));
   }
 });
 

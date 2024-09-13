@@ -64,16 +64,19 @@ const getPostComments = catchAsync(async (req, res, next) => {
   const { postId, postCommentId } = req.query;
 
   if (!postId && !postCommentId)
-    return res.status(400).json({
-      message: "Bad Request: Could not identify if Post or Post Comment",
-    });
+    return next(
+      new AppError(
+        "Bad Request: Could not identify if Post or Post Comment",
+        400
+      )
+    );
 
   let comments = [];
   if (postId) {
     const post = await Post.findById(postId);
 
     if (!post)
-      return res.status(404).json({
+      return res.status(200).json({
         message: "Post does not have comments",
       });
 
@@ -87,7 +90,7 @@ const getPostComments = catchAsync(async (req, res, next) => {
     const postComment = await PostComment.findById(postCommentId);
 
     if (!postComment)
-      return res.status(404).json({
+      return res.status(200).json({
         message: "Comment does not have replies",
       });
 
@@ -108,9 +111,12 @@ const getPostCommentCount = catchAsync(async (req, res, next) => {
   const { postId, postCommentId } = req.query;
 
   if (!postId && !postCommentId)
-    return res.status(400).json({
-      message: "Bad Request: Could not identify if Post or Post Comment",
-    });
+    return next(
+      new AppError(
+        "Bad Request: Could not identify if Post or Post Comment",
+        400
+      )
+    );
 
   let commentCount;
 
@@ -133,10 +139,7 @@ const deleteComment = catchAsync(async (req, res, next) => {
   let comment;
   if (postCommentId) {
     comment = await PostComment.findById(postCommentId);
-    if (!comment)
-      return res.status(404).json({
-        message: "Post Comment not found",
-      });
+    if (!comment) return next(new AppError("Post Comment not found", 404));
 
     await Post.findByIdAndUpdate(
       comment.postId,
@@ -145,10 +148,7 @@ const deleteComment = catchAsync(async (req, res, next) => {
     );
   } else if (postReplyId) {
     comment = await PostReply.findById(postReplyId);
-    if (!comment)
-      return res.status(404).json({
-        message: "Post Comment not found",
-      });
+    if (!comment) return next(new AppError("Post Reply not found", 404));
 
     await PostComment.findByIdAndUpdate(
       comment.postCommentId,
@@ -156,22 +156,19 @@ const deleteComment = catchAsync(async (req, res, next) => {
       { new: true }
     );
   } else {
-    return res.status(400).json({
-      message: "Bad Request: Could not identify if Post Comment or Post Reply",
-    });
+    return next(
+      new AppError(
+        "Bad Request: Could not identify if Post Comment or Post Reply",
+        400
+      )
+    );
   }
 
   await comment.deleteOne();
 
-  if (comment) {
-    return res.status(200).json({
-      message: "Comment deleted successfully",
-    });
-  } else {
-    return res.status(404).json({
-      message: "Comment does not exist",
-    });
-  }
+  return res.status(200).json({
+    message: "Comment deleted successfully",
+  });
 });
 
 module.exports = {

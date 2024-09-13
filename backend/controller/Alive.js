@@ -1,5 +1,5 @@
-const AppError = require("../../../Utilities/appError");
-const catchAsync = require("../../../Utilities/catchAsync");
+const AppError = require("../Utilities/appError");
+const catchAsync = require("../Utilities/catchAsync");
 
 const alive = catchAsync(async (res, nxet) => {
   const timestamp = Date.now();

@@ -5,8 +5,8 @@ const {
   getDownloadURL,
   uploadBytesResumable,
 } = require("firebase/storage");
-const AppError = require("../../../Utilities/appError");
-const catchAsync = require("../../../Utilities/catchAsync");
+const AppError = require("../../Utilities/appError");
+const catchAsync = require("../../Utilities/catchAsync");
 
 const post_profilepicture = catchAsync(async (req, res, next) => {
   const firebaseConfig = {

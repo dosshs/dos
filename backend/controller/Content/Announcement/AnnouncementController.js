@@ -11,8 +11,7 @@ const announcement_get = catchAsync(async (req, res, next) => {
   const announcement = await Announcement.find({
     _id: req.params.id,
   });
-  if (!announcement)
-    return res.status(404).json({ message: "Announcement not found" });
+  if (!announcement) return next(new AppError("Announcement not found", 404));
   res.status(200).json(announcement);
 });
 
@@ -21,7 +20,10 @@ const announcement_user_get = catchAsync(async (req, res, next) => {
     username: req.query.username,
   });
   if (!announcements)
-    return res.status(404).json({ message: "Announcements not found" });
+    return res
+      .status(200)
+      .json({ message: "User has not posted announcements yet." });
+
   res.status(200).json(announcements);
 });
 
@@ -46,13 +48,14 @@ const announcement_update = catchAsync(async (req, res, next) => {
 
   // Check if the document was found and updated
   if (!updatedAnnouncement) {
-    return res.status(404).json({ message: "Announcement not found" });
+    return next(new AppError("Announcement was not found and Updated.", 404));
   }
 
   // Send the updated document in the response
-  res
-    .status(200)
-    .json({ message: "Article Updated Successfully", updatedArticle });
+  res.status(200).json({
+    message: "Announcement Updated Successfully",
+    updatedAnnouncement,
+  });
 
   // } else {
   //   return res.status(403).json("Error Request");

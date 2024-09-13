@@ -13,7 +13,7 @@ const createCategory = catchAsync(async (req, res, next) => {
   });
 
   if (categoryFound.length > 0)
-    return res.status(400).json({
+    return res.status(200).json({
       message: `Category "${name}" is already registered`,
       categoryFound,
     });
@@ -70,15 +70,10 @@ const deleteCategory = catchAsync(async (req, res, next) => {
     category = await AnnouncementCategory.findOneAndDelete({ name: name });
   else if (categoryId)
     category = await AnnouncementCategory.findByIdAndDelete(categoryId);
-  else
-    return res.status(400).json({
-      message: "No category identifier",
-    });
+  else return next(new AppError("No category identifier", 400));
 
-  if (!category)
-    return res.status(200).json({
-      message: "Category not found",
-    });
+  if (!category) return;
+  next(new AppError("Category not found", 400));
 
   return res.status(200).json({
     message: "Category deleted successfully",

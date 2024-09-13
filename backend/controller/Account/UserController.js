@@ -53,7 +53,7 @@ const user_update = catchAsync(async (req, res, next) => {
   const user = await User.findById(userId);
 
   if (!user) {
-    return res.status(401).json({ message: "User not found" });
+    return next(new AppError("User not Found.", 404));
   }
 
   if (req.body.newPassword) {
@@ -67,7 +67,7 @@ const user_update = catchAsync(async (req, res, next) => {
     if (isPasswordValid) {
       req.body.password = await bcrypt.hash(req.body.newPassword, salt);
       delete req.body.newPassword;
-    } else return res.status(401).json({ message: "Incorrect Password" });
+    } else return next(new AppError("Incorrect Password", 401));
   }
 
   if (req.body.firstname && req.body.lastname) {
@@ -111,26 +111,21 @@ const user_update = catchAsync(async (req, res, next) => {
     );
   }
 
-  try {
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { $set: req.body },
-      { new: true }
-    );
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { $set: req.body },
+    { new: true }
+  );
 
-    if (!user) return res.status(404).json({ message: "User not Found." });
+  if (!updatedUser) return next(new AppError("User not Found.", 404));
 
-    const expiration = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
-    const payload = { user: JSON.stringify(user), exp: expiration };
-    const token = jwt.sign(payload, KEY);
+  const expiration = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
+  const payload = { user: JSON.stringify(updatedUser), exp: expiration };
+  const token = jwt.sign(payload, KEY);
 
-    return res
-      .status(200)
-      .json({ message: "Account Successfully Updated", token: token });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
+  return res
+    .status(200)
+    .json({ message: "Account Successfully Updated", token: token });
 });
 
 module.exports = {
