@@ -299,16 +299,20 @@ export default function Login({}) {
         </Helmet>
         <div className="bg-loginBg w-screen h-screen">
           <div
-            className="flex flex-col justify-between p-2 w-10/12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl md:flex-row md:w-5/6 lg:w-[60rem] md:bg-loginBlue md:p-0 lg:h-[32rem]"
+            className="flex flex-col justify-between p-2 w-10/12 min-h-12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl md:flex-row md:w-5/6 md:h-[26rem] lg:w-[63rem] bg-loginWhite md:p-0 lg:h-[35rem]"
             style={{ position: "relative" }}
           >
             <div
-              className="flex flex-col items-center justify-center bg-loginWhite h-[26rem] rounded-3xl p-4 pb-8 z-10 shadow-md shadow-black/30 md:w-2/5 md:shadow-none lg:h-full"
+              className={`flex flex-col items-center justify-center bg-loginWhite h-[26rem] rounded-3xl p-4 pb-8 z-10 shadow-md shadow-black/30 ${
+                isInSignInPage ? "md:left-0" : "md:left-full"
+              } ${
+                isInSignInPage ? "md:translate-x-0" : "md:-translate-x-full"
+              } md:w-3/5 md:rounded-2xl md:shadow-none md:absolute md:z-0 md:transition-all md:ease-out md:duration-300 lg:h-full`}
               // style={{
-              //   left: isInSignInPage /* && isInDesktop*/ ? 0 : "100%",
-              //   transform: !isInSignInPage && "translateX(-100%)",
-              //   position: "absolute",
-              //   transition: "300ms ease-out ",
+              //   left: isInSignInPage && window.innerWidth > 650 ? 0 : "100%",
+              //   transform: !isInSignInPage
+              //     ? "translateX(-100%)"
+              //     : "translateX(0)",
               // }}
             >
               <form className="h-full w-full flex flex-col justify-between items-center text-xs">
@@ -583,12 +587,24 @@ export default function Login({}) {
                 </div>
               </form>
             </div>
-            <div className="relative h-[16rem] w-full p-2 rounded-3xl bg-loginBlue text-loginWhite text-xs shadow-2xl shadow-black -translate-y-4 md:translate-y-0 md:h-[26rem] md:w-3/5 md:shadow-none lg:h-full">
-              <div className="absolute bottom-3 p-4">
-                <h2 className="font-bold text-lg text-center mb-2">
+            <div
+              className={`relative h-[16rem] w-full p-2 rounded-3xl bg-loginBlue text-loginWhite text-xs shadow-2xl shadow-black -translate-y-4 md:translate-y-0 md:absolute ${
+                isInSignInPage ? "md:right-0 " : "md:right-full"
+              } ${
+                !isInSignInPage && "md:translate-x-full"
+              }  md:transition-all md:duration-300 md:ease-out md:h-[26rem] md:w-2/5 md:shadow-none md:rounded-2xl lg:h-full`}
+              // style={{
+              //   right: isInSignInPage ? 0 : "100%",
+              //   transform: !isInSignInPage && "translateX(100%)",
+              //   position: "absolute",
+              //   transition: "300ms ease-out",
+              // }}
+            >
+              <div className="absolute p-4 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full">
+                <h2 className="font-bold text-lg text-center mb-2 lg:text-4xl lg:pb-8">
                   {isInSignInPage ? "Welcome Back!" : "Welcome to DOS"}
                 </h2>
-                <p className="text-justify">
+                <p className="text-justify lg:text-[14px]">
                   {isInSignInPage
                     ? "DOS, a dynamic and engaging platform designed for PUPSHS Students. With a friendly interface, a safe, moderated environment, DOS is the perfect space to share your thoughts and connect with your fellow students. Whether you want to post anonymously or publicly, DOS offers a variety of ways to share your personal reflections, funny anecdotes, or motivational messages. With the ability to post announcements, DOS is also a valuable tool to help keep everyone in the loop."
                     : "New to DOS? Create an account now and experience a dynamic and engaging platform designed for PUPSHS Students. With a friendly interface, a safe, moderated environment, DOS is the perfect space to share your thoughts and connect with your fellow students. Whether you want to post anonymously or publicly, DOS offers a variety of ways to share your personal reflections, funny anecdotes, or motivational messages. With the ability to post announcements, DOS is also a valuable tool to help keep everyone in the loop. So why not join DOS today?"}

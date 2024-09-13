@@ -3,9 +3,6 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      screens: {
-        xs: "400px",
-      },
       backgroundImage: {
         loginBg: "url('./src/assets/images/loginbg.png')",
       },
