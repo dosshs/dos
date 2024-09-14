@@ -16,7 +16,7 @@ export default function Login({}) {
     storedValue === null ? true : JSON.parse(storedValue)
   );
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [steps, setSteps] = useState(1);
+  const [steps, setSteps] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [signUpBtnMsg, setSignUpBtnMsg] = useState("SIGN UP");
