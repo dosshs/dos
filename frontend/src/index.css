@@ -1,15 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* 
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: "Montserrat", sans-serif;
-} */
+}
 
 @layer base {
+  .--server-msg {
+    @apply text-red-400;
+  }
+
+  .--server-success-msg {
+    @apply text-green-400;
+  }
+
   @media (max-width: 400px) {
     html {
       @apply text-xs;
@@ -17,7 +25,7 @@
   }
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
@@ -30,10 +38,6 @@
 body {
   overflow-y: hidden;
 }
-
-/* label {
-  font-size: 16px;
-} */
 
 button {
   cursor: pointer;
@@ -70,7 +74,6 @@ a {
 
 .active-chip {
   background-color: #e6d283;
-  /* background-color: #565294; */
   color: rgb(0, 0, 0);
 }
 
@@ -208,7 +211,7 @@ a {
 
 .react-loading-skeleton {
   z-index: 0;
-}
+} */
 
 /* @media (min-width: 1920px) {
   html {

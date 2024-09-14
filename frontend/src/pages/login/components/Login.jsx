@@ -299,7 +299,7 @@ export default function Login({}) {
         </Helmet>
         <div className="bg-loginBg w-screen h-screen">
           <div
-            className="flex flex-col justify-between p-2 w-10/12 min-h-12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl md:flex-row md:w-5/6 md:h-[26rem] lg:w-[63rem] bg-loginWhite md:p-0 lg:h-[35rem]"
+            className="flex flex-col justify-between p-2 w-10/12 max-w-[480px] min-h-12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl md:flex-row md:w-5/6 md:h-[26rem]  md:bg-loginWhite md:max-w-[770px] md:p-0 lg:min-w-63rem lg:max-w-[73rem] lg:h-[37rem]"
             style={{ position: "relative" }}
           >
             <div
@@ -307,20 +307,14 @@ export default function Login({}) {
                 isInSignInPage ? "md:left-0" : "md:left-full"
               } ${
                 isInSignInPage ? "md:translate-x-0" : "md:-translate-x-full"
-              } md:w-3/5 md:rounded-2xl md:shadow-none md:absolute md:z-0 md:transition-all md:ease-out md:duration-300 lg:h-full`}
-              // style={{
-              //   left: isInSignInPage && window.innerWidth > 650 ? 0 : "100%",
-              //   transform: !isInSignInPage
-              //     ? "translateX(-100%)"
-              //     : "translateX(0)",
-              // }}
+              } md:w-3/5 md:rounded-2xl md:shadow-none md:absolute md:z-0 md:transition-all md:ease-out md:duration-300 lg:p-28 lg:h-full`}
             >
               <form className="h-full w-full flex flex-col justify-between items-center text-xs">
                 <div className="w-full flex flex-col items-center space-y-3">
-                  <h1 className="text-2xl font-bold">
+                  <h1 className="text-2xl font-bold lg:text-4xl">
                     {isInSignInPage ? "Hello World!" : "Create Account"}
                   </h1>
-                  <p className="text-xs font-bold">
+                  <p className="text-xs font-bold lg:text-lg lg:font-normal">
                     {isForgotPassword
                       ? "Recover your Account"
                       : isInSignInPage
@@ -333,7 +327,7 @@ export default function Login({}) {
                       {isInSignInPage && (
                         <input
                           type="text"
-                          className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
+                          className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                           value={usernameOrEmail}
                           onChange={(e) => {
                             setUsernameOrEmail(e.target.value);
@@ -346,7 +340,7 @@ export default function Login({}) {
                         <>
                           <input
                             type="text"
-                            className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
+                            className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                             value={username}
                             onChange={(e) => {
                               setUsername(e.target.value);
@@ -355,7 +349,7 @@ export default function Login({}) {
                           />
                           <input
                             type="text"
-                            className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
+                            className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                             value={email}
                             onChange={(e) => {
                               setEmail(e.target.value);
@@ -367,7 +361,7 @@ export default function Login({}) {
                       {!isForgotPassword && (
                         <input
                           type="password"
-                          className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
+                          className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                           value={password}
                           onChange={(e) => {
                             setPassword(e.target.value);
@@ -379,7 +373,7 @@ export default function Login({}) {
                         <>
                           <input
                             type="password"
-                            className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
+                            className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                             value={confirmPass}
                             onChange={(e) => {
                               setConfirmPass(e.target.value);
@@ -414,7 +408,7 @@ export default function Login({}) {
                     <>
                       <input
                         type="text"
-                        className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
+                        className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                         value={firstName}
                         onChange={(e) => {
                           setFisrtName(e.target.value);
@@ -424,7 +418,7 @@ export default function Login({}) {
                       {!isInSignInPage && (
                         <input
                           type="text"
-                          className="p-2 w-5/6 rounded-full border-t-2 border-mediumBlue focus:outline-black"
+                          className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                           value={lastName}
                           onChange={(e) => {
                             setLastName(e.target.value);
@@ -506,7 +500,7 @@ export default function Login({}) {
                             <label htmlFor="remember-me">
                               {" "}
                               <input
-                                className="accent-mediumBlue"
+                                className="accent-loginBlue"
                                 type="checkbox"
                                 name="isRememberMe"
                                 id="remember-me"
@@ -521,7 +515,7 @@ export default function Login({}) {
                         )}
 
                         <p
-                          className="cursor-pointer text-mediumBlue hover:underline"
+                          className="cursor-pointer text-loginBlue hover:underline"
                           onClick={() => setIsForgotPassword(!isForgotPassword)}
                         >
                           {!isForgotPassword
@@ -538,27 +532,27 @@ export default function Login({}) {
                 <div className="text-mediumBlue text-xs text-center space-y-2">
                   {isForgotPassword ? (
                     <button
-                      className="bg-mediumBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
+                      className="bg-loginBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
                       onClick={handleForgotPassword}
                     >
                       FIND
                     </button>
                   ) : isInSignInPage ? (
                     <button
-                      className="bg-mediumBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
+                      className="bg-loginBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
                       onClick={handleLogInSubmit}
                     >
                       {loginBtnMsg}
                     </button>
                   ) : (
                     <button
-                      className="bg-mediumBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
+                      className="bg-loginBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
                       onClick={handleSignUpSubmit}
                     >
                       {signUpBtnMsg}
                     </button>
                   )}
-                  <div>
+                  <div className="text-loginBlue">
                     <p className="inline-block">
                       {isInSignInPage
                         ? "Not yet joined with DOS?"
@@ -592,16 +586,10 @@ export default function Login({}) {
                 isInSignInPage ? "md:right-0 " : "md:right-full"
               } ${
                 !isInSignInPage && "md:translate-x-full"
-              }  md:transition-all md:duration-300 md:ease-out md:h-[26rem] md:w-2/5 md:shadow-none md:rounded-2xl lg:h-full`}
-              // style={{
-              //   right: isInSignInPage ? 0 : "100%",
-              //   transform: !isInSignInPage && "translateX(100%)",
-              //   position: "absolute",
-              //   transition: "300ms ease-out",
-              // }}
+              }  md:transition-all md:duration-300 md:ease-out md:h-[26rem] md:w-2/5 md:shadow-none md:rounded-2xl lg:h-full `}
             >
-              <div className="absolute p-4 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full">
-                <h2 className="font-bold text-lg text-center mb-2 lg:text-4xl lg:pb-8">
+              <div className="absolute p-4 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full lg:p-8 ">
+                <h2 className="font-bold text-lg text-center mb-2 lg:text-4xl lg:pb-8 ">
                   {isInSignInPage ? "Welcome Back!" : "Welcome to DOS"}
                 </h2>
                 <p className="text-justify lg:text-[14px]">
