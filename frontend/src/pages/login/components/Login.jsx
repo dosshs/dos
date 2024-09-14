@@ -16,7 +16,7 @@ export default function Login({}) {
     storedValue === null ? true : JSON.parse(storedValue)
   );
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [steps, setSteps] = useState(0);
+  const [steps, setSteps] = useState(1);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [signUpBtnMsg, setSignUpBtnMsg] = useState("SIGN UP");
@@ -299,15 +299,15 @@ export default function Login({}) {
         </Helmet>
         <div className="bg-loginBg w-screen h-screen">
           <div
-            className="flex flex-col justify-between p-2 w-10/12 max-w-[480px] min-h-12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl md:flex-row md:w-5/6 md:h-[26rem]  md:bg-loginWhite md:max-w-[770px] md:p-0 lg:min-w-63rem lg:max-w-[73rem] lg:h-[37rem]"
+            className="flex flex-col justify-between p-2 w-10/12 max-w-[480px] min-h-12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl md:flex-row md:w-5/6 md:h-[30rem]  md:bg-loginWhite md:max-w-[770px] md:p-0 lg:min-w-63rem lg:max-w-[73rem] lg:h-[37rem]"
             style={{ position: "relative" }}
           >
             <div
-              className={`flex flex-col items-center justify-center bg-loginWhite h-[26rem] rounded-3xl p-4 pb-8 z-10 shadow-md shadow-black/30 ${
+              className={`flex flex-col items-center justify-center bg-loginWhite rounded-3xl p-4 pb-8 z-10 shadow-md shadow-black/30 ${
                 isInSignInPage ? "md:left-0" : "md:left-full"
               } ${
                 isInSignInPage ? "md:translate-x-0" : "md:-translate-x-full"
-              } md:w-3/5 md:rounded-2xl md:shadow-none md:absolute md:z-0 md:transition-all md:ease-out md:duration-300 lg:p-28 lg:h-full`}
+              } md:h-full md:w-3/5 md:rounded-2xl md:shadow-none md:absolute md:z-0 md:transition-all md:ease-out md:duration-300 lg:p-28 lg:h-full`}
             >
               <form className="h-full w-full flex flex-col justify-between items-center text-xs">
                 <div className="w-full flex flex-col items-center space-y-3">
@@ -327,7 +327,6 @@ export default function Login({}) {
                       {isInSignInPage && (
                         <input
                           type="text"
-                          className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                           value={usernameOrEmail}
                           onChange={(e) => {
                             setUsernameOrEmail(e.target.value);
@@ -340,7 +339,6 @@ export default function Login({}) {
                         <>
                           <input
                             type="text"
-                            className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                             value={username}
                             onChange={(e) => {
                               setUsername(e.target.value);
@@ -349,7 +347,6 @@ export default function Login({}) {
                           />
                           <input
                             type="text"
-                            className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                             value={email}
                             onChange={(e) => {
                               setEmail(e.target.value);
@@ -361,7 +358,6 @@ export default function Login({}) {
                       {!isForgotPassword && (
                         <input
                           type="password"
-                          className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                           value={password}
                           onChange={(e) => {
                             setPassword(e.target.value);
@@ -373,7 +369,6 @@ export default function Login({}) {
                         <>
                           <input
                             type="password"
-                            className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                             value={confirmPass}
                             onChange={(e) => {
                               setConfirmPass(e.target.value);
@@ -408,7 +403,6 @@ export default function Login({}) {
                     <>
                       <input
                         type="text"
-                        className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                         value={firstName}
                         onChange={(e) => {
                           setFisrtName(e.target.value);
@@ -418,7 +412,6 @@ export default function Login({}) {
                       {!isInSignInPage && (
                         <input
                           type="text"
-                          className="p-2 w-5/6 rounded-full border-t-2 border-loginBlue focus:outline-black"
                           value={lastName}
                           onChange={(e) => {
                             setLastName(e.target.value);
@@ -427,7 +420,49 @@ export default function Login({}) {
                         />
                       )}
                       <select
-                        className=""
+                        className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+                        style={{
+                          borderColor: "#4f709c",
+                          backgroundColor: "white",
+                          color: "#000",
+                        }}
+                        // value={section}
+                        // onChange={(e) => {
+                        //   setSection(e.target.value);
+                        // }}
+                      >
+                        <option value={null}>Branch</option>
+                      </select>
+                      <select
+                        className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+                        style={{
+                          borderColor: "#4f709c",
+                          backgroundColor: "white",
+                          color: "#000",
+                        }}
+                        // value={section}
+                        // onChange={(e) => {
+                        //   setSection(e.target.value);
+                        // }}
+                      >
+                        <option value={null}>Course</option>
+                      </select>
+                      <select
+                        className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+                        style={{
+                          borderColor: "#4f709c",
+                          backgroundColor: "white",
+                          color: "#000",
+                        }}
+                        // value={section}
+                        // onChange={(e) => {
+                        //   setSection(e.target.value);
+                        // }}
+                      >
+                        <option value={null}>Department</option>
+                      </select>
+                      <select
+                        className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
                         style={{
                           borderColor: "#4f709c",
                           backgroundColor: "white",
@@ -439,31 +474,6 @@ export default function Login({}) {
                         }}
                       >
                         <option value={null}>Section</option>
-                        <option value={0}>Outsider</option>
-                        <option value={1}>ICT 12 - 1</option>
-                        <option value={2}>ICT 12 - 2</option>
-                        <option value={3}>STEM 11 - 1</option>
-                        <option value={4}>STEM 12 - 1</option>
-                        <option value={5}>STEM 12 - 2</option>
-                        <option value={6}>STEM 12 - 3</option>
-                        <option value={7}>STEM 12 - 4</option>
-                        <option value={8}>STEM 12 - 5</option>
-                        <option value={9}>STEM 12 - 6</option>
-                        <option value={10}>STEM 12 - 7</option>
-                        <option value={11}>STEM 12 - 8</option>
-                        <option value={12}>STEM 12 - 9</option>
-                        <option value={13}>STEM 12 - 10</option>
-                        <option value={14}>ABM 11 - 1</option>
-                        <option value={15}>ABM 12 - 1</option>
-                        <option value={16}>ABM 12 - 2</option>
-                        <option value={17}>ABM 12 - 3</option>
-                        <option value={18}>ABM 12 - 4</option>
-                        <option value={19}>ABM 12 - 5</option>
-                        <option value={20}>ABM 12 - 6</option>
-                        <option value={21}>ABM 12 - 7</option>
-                        <option value={22}>ABM 12 - 8</option>
-                        <option value={23}>HUMSS 12 - 1</option>
-                        <option value={24}>HUMSS 12 - 2</option>
                       </select>
                     </>
                   ) : (
@@ -586,7 +596,7 @@ export default function Login({}) {
                 isInSignInPage ? "md:right-0 " : "md:right-full"
               } ${
                 !isInSignInPage && "md:translate-x-full"
-              }  md:transition-all md:duration-300 md:ease-out md:h-[26rem] md:w-2/5 md:shadow-none md:rounded-2xl lg:h-full `}
+              } md:h-full md:transition-all md:duration-300 md:ease-out md:h-[26rem] md:w-2/5 md:shadow-none md:rounded-2xl lg:h-full `}
             >
               <div className="absolute p-4 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full lg:p-8 ">
                 <h2 className="font-bold text-lg text-center mb-2 lg:text-4xl lg:pb-8 ">

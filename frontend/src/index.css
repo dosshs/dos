@@ -18,6 +18,10 @@
     @apply text-green-400;
   }
 
+  input {
+    @apply w-5/6 p-2 rounded-full border-t-2 border-t-loginBlue focus:outline-black;
+  }
+
   @media (max-width: 400px) {
     html {
       @apply text-xs;
