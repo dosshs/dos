@@ -37,10 +37,13 @@ export default function Login({}) {
   const [confirmPass, setConfirmPass] = useState("");
   const [firstName, setFisrtName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [section, setSection] = useState();
   const [userId, setUserId] = useState("");
   const [code, setCode] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
+  const [branch, setBranch] = useState();
+  const [department, setDepartment] = useState();
+  const [course, setCourse] = useState();
+  const [section, setSection] = useState();
 
   //Recover Account
   const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -303,7 +306,7 @@ export default function Login({}) {
             style={{ position: "relative" }}
           >
             <div
-              className={`flex flex-col items-center justify-center bg-loginWhite rounded-3xl p-4 pb-8 z-10 shadow-md shadow-black/30 ${
+              className={`flex flex-col items-center justify-center h-[30rem] bg-loginWhite rounded-3xl p-4 pb-8 z-10 shadow-md shadow-black/30 ${
                 isInSignInPage ? "md:left-0" : "md:left-full"
               } ${
                 isInSignInPage ? "md:translate-x-0" : "md:-translate-x-full"
@@ -426,62 +429,71 @@ export default function Login({}) {
                           backgroundColor: "white",
                           color: "#000",
                         }}
-                        // value={section}
-                        // onChange={(e) => {
-                        //   setSection(e.target.value);
-                        // }}
+                        value={branch}
+                        onChange={(e) => {
+                          setBranch(e.target.value);
+                        }}
                       >
                         <option value={null}>Branch</option>
+                        <option value={1}>Sta. Mesa</option>
                       </select>
-                      <select
-                        className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
-                        style={{
-                          borderColor: "#4f709c",
-                          backgroundColor: "white",
-                          color: "#000",
-                        }}
-                        // value={section}
-                        // onChange={(e) => {
-                        //   setSection(e.target.value);
-                        // }}
-                      >
-                        <option value={null}>Course</option>
-                      </select>
-                      <select
-                        className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
-                        style={{
-                          borderColor: "#4f709c",
-                          backgroundColor: "white",
-                          color: "#000",
-                        }}
-                        // value={section}
-                        // onChange={(e) => {
-                        //   setSection(e.target.value);
-                        // }}
-                      >
-                        <option value={null}>Department</option>
-                      </select>
-                      <select
-                        className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
-                        style={{
-                          borderColor: "#4f709c",
-                          backgroundColor: "white",
-                          color: "#000",
-                        }}
-                        value={section}
-                        onChange={(e) => {
-                          setSection(e.target.value);
-                        }}
-                      >
-                        <option value={null}>Section</option>
-                      </select>
+                      {branch && (
+                        <select
+                          className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+                          style={{
+                            borderColor: "#4f709c",
+                            backgroundColor: "white",
+                            color: "#000",
+                          }}
+                          value={department}
+                          onChange={(e) => {
+                            setDepartment(e.target.value);
+                          }}
+                        >
+                          <option value={null}>Department</option>
+                          <option value={1}>CCIS</option>
+                        </select>
+                      )}
+                      {department && (
+                        <select
+                          className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+                          style={{
+                            borderColor: "#4f709c",
+                            backgroundColor: "white",
+                            color: "#000",
+                          }}
+                          value={course}
+                          onChange={(e) => {
+                            setCourse(e.target.value);
+                          }}
+                        >
+                          <option value={null}>Course</option>
+                          <option value={1}>Computer Science</option>
+                        </select>
+                      )}
+                      {course && (
+                        <select
+                          className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+                          style={{
+                            borderColor: "#4f709c",
+                            backgroundColor: "white",
+                            color: "#000",
+                          }}
+                          value={section}
+                          onChange={(e) => {
+                            setSection(e.target.value);
+                          }}
+                        >
+                          <option value={null}>Section</option>
+                          <option value={1}>CS 1-1</option>
+                        </select>
+                      )}
                     </>
                   ) : (
                     steps >= 2 && (
                       <>
                         <p className="signin-text">
                           Enter the code sent to {email}
-                          <br />
                           to finalize your account.
                         </p>
                         <input
@@ -596,7 +608,7 @@ export default function Login({}) {
                 isInSignInPage ? "md:right-0 " : "md:right-full"
               } ${
                 !isInSignInPage && "md:translate-x-full"
-              } md:h-full md:transition-all md:duration-300 md:ease-out md:h-[26rem] md:w-2/5 md:shadow-none md:rounded-2xl lg:h-full `}
+              } md:transition-all md:duration-300 md:ease-out md:h-full md:w-2/5 md:shadow-none md:rounded-2xl lg:h-full `}
             >
               <div className="absolute p-4 md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full lg:p-8 ">
                 <h2 className="font-bold text-lg text-center mb-2 lg:text-4xl lg:pb-8 ">

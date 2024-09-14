@@ -15,6 +15,8 @@ export default {
         loginBlue: "#4f709c",
         yellowAccent: "##e5d283",
         mediumBlue: "#0cc0df",
+        chip: "#213555",
+        chipActive: "#e6d283",
       },
     },
   },
