@@ -18,7 +18,6 @@ export default function CreateAnnouncement({
   const [isCreatingAnnouncement, setIsCreatingAnnouncement] =
     useState("Announce");
   const [announcing, setAnnouncing] = useState(false);
-  const [isAnonymous, setIsAnonymous] = useState(false);
   const [strandName, setStrandName] = useState("");
   const [strand, setStrand] = useState();
   const [className, seClassName] = useState("");
@@ -211,17 +210,6 @@ export default function CreateAnnouncement({
                   <option value={classSection}>{className}</option>
                 ) : null}
               </select>
-              <div className="anonymous-btn">
-                <input
-                  type="checkbox"
-                  id="isAnonymous"
-                  value={isAnonymous}
-                  onClick={(e) => {
-                    setIsAnonymous(e.target.checked);
-                  }}
-                />
-                <label htmlFor="isAnonymous">Post Anonymously</label>
-              </div>
             </div>
           </div>
         </div>

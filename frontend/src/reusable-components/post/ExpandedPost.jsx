@@ -36,6 +36,7 @@ export default function ExpandedPost({
   const [likeCounts, setlikeCounts] = useState(likeCount);
   const [likeInProgress, setLikeInProgress] = useState(false);
   const [isCommentFetching, setIsCommentFetching] = useState(true);
+  const [isReplyAnonymous, setIsReplyAnonymous] = useState(false);
 
   async function handleLike() {
     if (likeInProgress) return;
@@ -176,9 +177,9 @@ export default function ExpandedPost({
           </div>
           <div className="report-post-container"></div>
         </div>
-        <div className="post-content" style={{ padding: "1rem 0 0" }}>
+        <div className=" post-content" style={{ padding: "1rem 0 0" }}>
           <div className="contents">
-            <p className="category">
+            <p className="pl-4 category">
               #
               {category === "66e2581e0df49e37167eccfe"
                 ? "General"
@@ -191,7 +192,11 @@ export default function ExpandedPost({
                 : category === "66e25a1b561b417005c970f7" && "Confession"}
             </p>
             {content.split("\n").map((line, index) => (
-              <p key={index} style={{ fontSize: "0.95rem" }}>
+              <p
+                key={index}
+                className="pl-4 pb-4 "
+                style={{ fontSize: "0.95rem" }}
+              >
                 {line}
               </p>
             ))}
@@ -240,6 +245,18 @@ export default function ExpandedPost({
                   setComment(e.target.value);
                 }}
               ></textarea>
+            </div>
+            <div className="mr-4">
+              <input
+                type="checkbox"
+                id="isAnonymous"
+                className="m-1"
+                value={isReplyAnonymous}
+                onClick={(e) => {
+                  setIsReplyAnonymous(e.target.checked);
+                }}
+              />
+              <label htmlFor="isAnonymous">Post Anonymously</label>
             </div>
             <button className="reply-btn" onClick={submitComment}>
               Reply

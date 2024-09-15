@@ -27,6 +27,7 @@ export default function Reply({
   const [isCommentReplyOpen, setIsCommentReplyOpen] = useState(false);
   const [reply, setReply] = useState("");
   const [replying, setReplying] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
 
   const toggleReadMore = () => {
     setIsCollapsed(!isCollapsed);
@@ -320,6 +321,18 @@ export default function Reply({
                   setReply(e.target.value);
                 }}
               ></textarea>
+            </div>
+            <div className="mr-4">
+              <input
+                type="checkbox"
+                id="isAnonymous"
+                className="mr-1"
+                value={isAnonymous}
+                onClick={(e) => {
+                  setIsAnonymous(e.target.checked);
+                }}
+              />
+              <label htmlFor="isAnonymous">Post Anonymously</label>
             </div>
             <button className="reply-btn" onClick={submitReply}>
               Reply
