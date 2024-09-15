@@ -112,13 +112,13 @@ const getAnnouncementComments = catchAsync(async (req, res, next) => {
 const getAnnouncementCommentCount = catchAsync(async (req, res, next) => {
   const { announcementId, announcementCommentId } = req.query;
 
-  if (!announcementId && !announcementCommentId) return;
-  next(
-    new AppError(
-      "Bad Request: Could not identify if Announcement or Announcement Comment",
-      400
-    )
-  );
+  if (!announcementId && !announcementCommentId)
+    return next(
+      new AppError(
+        "Bad Request: Could not identify if Announcement or Announcement Comment",
+        400
+      )
+    );
 
   let commentCount;
 

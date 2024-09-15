@@ -31,7 +31,7 @@ const user_signup = catchAsync(async (req, res, next) => {
   });
 });
 
-const user_login = catchAsync(async (req, res) => {
+const user_login = catchAsync(async (req, res, next) => {
   const KEY = process.env.KEY;
   const { emailOrUsername, password } = req.body;
   // Check if the user exists by email or username
@@ -58,7 +58,7 @@ const user_login = catchAsync(async (req, res) => {
   return res.status(200).json({ message: "Login successful", token });
 });
 
-const InvalidateToken = catchAsync(async (req, res) => {
+const InvalidateToken = catchAsync(async (req, res, next) => {
   const { token } = req.query;
 
   const invalidToken = new InvalidToken({
@@ -71,7 +71,7 @@ const InvalidateToken = catchAsync(async (req, res) => {
     .json({ message: "Logged Out Successfully", invalidToken });
 });
 
-const user_find = catchAsync(async (req, res) => {
+const user_find = catchAsync(async (req, res, next) => {
   //Email or Username
   const { account } = req.query;
   // Check if the user exists by email or username
@@ -97,7 +97,7 @@ const user_find = catchAsync(async (req, res) => {
   res.status(200).json({ message: "User Fetched", other });
 });
 
-const user_recover = catchAsync(async (req, res) => {
+const user_recover = catchAsync(async (req, res, next) => {
   const KEY = process.env.KEY;
   const { userId } = req.query;
   const { password } = req.body;

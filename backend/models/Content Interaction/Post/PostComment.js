@@ -7,6 +7,10 @@ const PostCommentSchema = new mongoose.Schema({
   fullname: String,
   postId: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
   content: String,
+  isAnonymous: {
+    type: Boolean,
+    default: false,
+  },
   dateCreated: { type: Date, default: Date.now },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "PostLike" }],
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "PostComment" }],

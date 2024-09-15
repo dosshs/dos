@@ -13,6 +13,7 @@ const commentPost = catchAsync(async (req, res, next) => {
     postId,
     postCommentId,
     content,
+    isAnonymous,
   } = req.body;
   let comment;
 
@@ -24,6 +25,7 @@ const commentPost = catchAsync(async (req, res, next) => {
       fullname,
       postId,
       content,
+      isAnonymous,
     });
   } else if (postCommentId) {
     comment = new PostReply({
@@ -33,6 +35,7 @@ const commentPost = catchAsync(async (req, res, next) => {
       fullname,
       postCommentId,
       content,
+      isAnonymous,
     });
   } else {
     return res.status(204).json({ message: "Comment Unidentified" });

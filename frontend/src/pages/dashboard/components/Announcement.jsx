@@ -180,9 +180,9 @@ export default function Announcements({
                 announcements
                   .filter(
                     (announce) =>
-                      announce.category === "66e25b1634b4c8b76f3e1542" ||
-                      announce.category === "66e25b2b34b4c8b76f3e1546" ||
-                      announce.category === "66e25b3934b4c8b76f3e1549"
+                      announce.category === "66e6f464e181020d4c6fd0c0" ||
+                      announce.category === "66e6f45ce181020d4c6fd0bd" ||
+                      announce.category === "66e702294e3516f54be26c7a"
                   )
                   .map((el) => (
                     <Announce

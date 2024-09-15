@@ -91,12 +91,16 @@ const getDetail = catchAsync(async (req, res, next) => {
   } else if (identifier === "department") {
     detail = await Department.find();
   } else if (identifier === "course") {
-    detail = await Course.find();
+    if (branchId) {
+      detail = await Course.find({ branchId: branchId });
+    } else detail = await Course.find();
   } else if (identifier === "section") {
     if (courseId && branchId) {
       detail = await Section.find({ courseId: courseId, branchId: branchId });
     } else if (courseId) {
       detail = await Section.find({ courseId: courseId });
+    } else if (branchId) {
+      detail = await Section.find({ branchId: branchId });
     } else detail = await Section.find();
   } else {
     return next(new AppError("Invalid identifier", 400));
