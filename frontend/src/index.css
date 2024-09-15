@@ -1,8 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: "Montserrat", sans-serif;
+}
+
+@layer base {
+  .--server-msg {
+    @apply text-red-400;
+  }
+
+  .--server-success-msg {
+    @apply text-green-400;
+  }
+
+  .overlay {
+    @apply fixed top-0 left-0 w-screen h-screen bg-black/60 backdrop-blur-sm z-[1];
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    @apply w-5/6 p-2 rounded-full border-t-2 border-t-loginBlue focus:outline-black;
+  }
+
+  .--chip {
+    @apply py-2 px-16 min-w-[10rem] rounded-full text-white font-medium whitespace-nowrap mr-4 bg-chip;
+  }
+
+  .active-chip {
+    @apply bg-chipActive text-black;
+  }
+
+  @media (max-width: 400px) {
+    html {
+      @apply text-xs;
+    }
+  }
 }
 
 ::-webkit-scrollbar {
@@ -15,37 +52,7 @@
   border-radius: 1rem;
 }
 
-body {
-  overflow-y: hidden;
-}
-/* @font-face {
-  font-family: Helvetica, sans-serif;
-  src: url();
-} */
-
-label {
-  font-size: 0.8rem;
-}
-
-button {
-  cursor: pointer;
-}
-
-select:focus {
-  outline: 0;
-}
-
-a {
-  color: black;
-}
-
-.--big-h2 {
-  font-size: 2.3rem;
-  text-shadow: 2px 2px #00000055;
-  font-family: Helvetica, sans-serif;
-}
-
-.--chip {
+/* .--chip {
   padding: 0.5rem 4rem;
   min-width: 10rem;
   background-color: #213555;
@@ -58,37 +65,12 @@ a {
   border: none;
   cursor: pointer;
   text-align: center;
-}
+} */
 
-.active-chip {
+/* .active-chip {
   background-color: #e6d283;
-  /* background-color: #565294; */
   color: rgb(0, 0, 0);
-}
-
-.--announce-btn {
-  margin-right: 0;
-}
-
-.homepage-btn {
-  margin-top: 2rem;
-  font-weight: 700;
-}
-
-.--announce {
-  border: 0;
-  padding: 0 1rem;
-}
-
-.--server-msg {
-  color: red;
-  font-size: 0.8rem;
-}
-
-.--server-success-msg {
-  color: green;
-  font-size: 0.8rem;
-}
+} */
 
 .profile-pic {
   height: 2.5rem;
@@ -125,6 +107,58 @@ a {
   bottom: 1rem;
   cursor: pointer;
 }
+
+/*
+
+body {
+  overflow-y: hidden;
+}
+
+button {
+  cursor: pointer;
+}
+
+select:focus {
+  outline: 0;
+}
+
+a {
+  color: black;
+}
+
+.--big-h2 {
+  font-size: 2.3rem;
+  text-shadow: 2px 2px #00000055;
+  font-family: Helvetica, sans-serif;
+}
+
+
+
+.--announce-btn {
+  margin-right: 0;
+}
+
+.homepage-btn {
+  margin-top: 2rem;
+  font-weight: 700;
+}
+
+.--announce {
+  border: 0;
+  padding: 0 1rem;
+}
+
+.--server-msg {
+  color: red;
+  font-size: 0.8rem;
+}
+
+.--server-success-msg {
+  color: green;
+  font-size: 0.8rem;
+}
+
+
 
 .--white-text {
   color: white;
@@ -200,9 +234,9 @@ a {
 
 .react-loading-skeleton {
   z-index: 0;
-}
+} */
 
-@media (min-width: 1920px) {
+/* @media (min-width: 1920px) {
   html {
     font-size: 18px;
   }
@@ -224,4 +258,4 @@ a {
   textarea {
     font-size: 10px;
   }
-}
+} */

@@ -2,16 +2,11 @@ import "../stylesheets/TC.css";
 
 function TermsConditions({ onCloseModal }) {
   return (
-    <div className="terms-conditions">
-      <h2
-        style={{
-          paddingBottom: "1rem",
-          borderBottom: "1px solid rgb(0, 0, 0, 0.2)",
-        }}
-      >
+    <div className="flex flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-11/12 h-5/6 bg-white z-10 rounded-lg p-3 overflow-hidden md:w-3/4 md:p-4">
+      <h2 className="border-b-2 py-2 pb-4 font-bold text-lg">
         Terms and Conditions
       </h2>
-      <div className="tc-container">
+      <div className="overflow-y-scroll h-full mt-4 pr-4 pb-4">
         <p style={{ fontSize: "0.9rem" }}>
           Terms and Conditions
           <br />
