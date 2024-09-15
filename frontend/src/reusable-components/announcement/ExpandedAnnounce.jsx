@@ -35,6 +35,7 @@ export default function ExpandedAnnounce({
   const [likeCounts, setlikeCounts] = useState(likeCount);
   const [likeInProgress, setLikeInProgress] = useState(false);
   const [isCommentFetching, setIsCommentFetching] = useState(true);
+  const [isAnonymous, setIsAnonymous] = useState(false);
 
   async function handleLike() {
     if (likeInProgress) return;
@@ -164,7 +165,7 @@ export default function ExpandedAnnounce({
         </div>
         <div className="post-content" style={{ padding: "1rem 0 0" }}>
           <div className="contents">
-            <p className="category">
+            <p className="pl-4  category">
               #
               {category === "66e25b1634b4c8b76f3e1542"
                 ? "DOS"
@@ -173,7 +174,11 @@ export default function ExpandedAnnounce({
                 : category === "66e25b3934b4c8b76f3e1549" && "CCIS"}
             </p>
             {content.split("\n").map((line, index) => (
-              <p key={index} style={{ fontSize: "0.95rem" }}>
+              <p
+                key={index}
+                className="pl-4 pb-4"
+                style={{ fontSize: "0.95rem" }}
+              >
                 {line}
               </p>
             ))}
@@ -227,6 +232,18 @@ export default function ExpandedAnnounce({
                   setComment(e.target.value);
                 }}
               ></textarea>
+            </div>
+            <div className="mr-4">
+              <input
+                type="checkbox"
+                id="isAnonymous"
+                className="m-1"
+                value={isAnonymous}
+                onClick={(e) => {
+                  setIsAnonymous(e.target.checked);
+                }}
+              />
+              <label htmlFor="isAnonymous">Post Anonymously</label>
             </div>
             <button className="reply-btn" onClick={submitComment}>
               Reply

@@ -109,7 +109,7 @@ export default function CreatePost({
                 <option value="66e25a0d561b417005c970f4">Rant</option>
                 <option value="66e25a1b561b417005c970f7">Confession</option>
               </select>
-              <div className="anonymous-btn">
+              <div className="anonymous-btn w-auto gap-2">
                 <input
                   type="checkbox"
                   id="isAnonymous"
