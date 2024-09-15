@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const BranchSchema = new mongoose.Schema({
-  name: {
+  branchName: {
     type: String,
     required: true,
   },

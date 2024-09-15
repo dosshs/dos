@@ -13,7 +13,7 @@ const createCategory = catchAsync(async (req, res, next) => {
   });
 
   if (categoryFound.length > 0)
-    return res.status(400).json({
+    return res.status(200).json({
       message: `Category "${name}" is already registered`,
       categoryFound,
     });

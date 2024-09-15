@@ -12,7 +12,7 @@ const announcement_get = catchAsync(async (req, res, next) => {
     _id: req.params.id,
   });
   if (!announcement) return next(new AppError("Announcement not found", 404));
-  res.status(200).json(announcement);
+  return res.status(200).json(announcement);
 });
 
 const announcement_user_get = catchAsync(async (req, res, next) => {
@@ -24,14 +24,14 @@ const announcement_user_get = catchAsync(async (req, res, next) => {
       .status(200)
       .json({ message: "User has not posted announcements yet." });
 
-  res.status(200).json(announcements);
+  return res.status(200).json(announcements);
 });
 
 const announcement_post = catchAsync(async (req, res, next) => {
   const newAnnouncement = new Announcement(req.body);
 
   const savedAnnouncement = await newAnnouncement.save();
-  res.status(200).json({
+  return res.status(200).json({
     message: "Announcement Successfully Created",
     savedAnnouncement,
   });
@@ -52,7 +52,7 @@ const announcement_update = catchAsync(async (req, res, next) => {
   }
 
   // Send the updated document in the response
-  res.status(200).json({
+  return res.status(200).json({
     message: "Announcement Updated Successfully",
     updatedAnnouncement,
   });
@@ -66,7 +66,7 @@ const announcement_delete = catchAsync(async (req, res, next) => {
   //   if (req.body.userId === req.params.id || req.user.isAdmin) {
 
   await Announcement.findByIdAndDelete(req.params.id);
-  res.status(200).json("Announcement Successfully Deleted");
+  return res.status(200).json("Announcement Successfully Deleted");
 
   // } else {
   // return res

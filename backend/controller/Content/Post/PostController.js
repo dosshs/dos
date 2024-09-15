@@ -39,7 +39,9 @@ const post_post = catchAsync(async (req, res, next) => {
   const newPost = new Post(req.body);
 
   const savedPost = await newPost.save();
-  res.status(200).json({ message: "Post Successfully Created", savedPost });
+  return res
+    .status(200)
+    .json({ message: "Post Successfully Created", savedPost });
 });
 
 const post_update = catchAsync(async (req, res, next) => {
@@ -52,7 +54,9 @@ const post_update = catchAsync(async (req, res, next) => {
   if (!updatedPost) {
     return next(new AppError("Post not found", 404));
   }
-  res.status(200).json({ message: "Post Updated Successfully", updatedPost });
+  return res
+    .status(200)
+    .json({ message: "Post Updated Successfully", updatedPost });
 });
 
 const post_delete = catchAsync(async (req, res, next) => {
