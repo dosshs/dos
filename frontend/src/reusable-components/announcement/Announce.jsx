@@ -156,11 +156,11 @@ export default function Announce({
           >
             <p className="category">
               #
-              {category === "66e25b1634b4c8b76f3e1542"
+              {category === "66e6f45ce181020d4c6fd0bd"
                 ? "DOS"
-                : category === "66e25b2b34b4c8b76f3e1546"
+                : category === "66e6f464e181020d4c6fd0c0"
                 ? "PUP"
-                : category === "66e25b3934b4c8b76f3e1549" && "CCIS"}
+                : category === "66e702294e3516f54be26c7a" && "CCIS"}
             </p>
             {content.split("\n").map((line, index) => (
               <p key={index} style={{ fontSize: "0.95rem" }}>

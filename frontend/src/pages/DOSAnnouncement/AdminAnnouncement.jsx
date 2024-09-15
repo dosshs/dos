@@ -94,7 +94,7 @@ export default function Announcements({ fullname, username, userId }) {
                 <AnnouncementSkeleton cards={2} />
               ) : (
                 announcements
-                  .filter((el) => el.category === "66e25b1634b4c8b76f3e1542")
+                  .filter((el) => el.category === "66e6f45ce181020d4c6fd0bd")
                   .map((el) => (
                     <Announce
                       key={el._id}

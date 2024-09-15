@@ -2,6 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { URL } from "../../App";
+import { Link } from "react-router-dom";
 
 function CommentsReply({
   fullname,
@@ -11,6 +12,7 @@ function CommentsReply({
   commentId,
   userUsername,
   isPost,
+  isAnonymous,
 }) {
   const token = Cookies.get("token");
   const userId = Cookies.get("userId");
@@ -154,13 +156,9 @@ function CommentsReply({
           //   style={{ width: "3.5rem", height: "3.5rem" }}
         ></div>
         <div className="post-author">
-          <p className="display-name">
-            {/*isAnonymous ? "Anonymous" : fullname*/}
-            {fullname}
-          </p>
+          <p className="display-name">{isAnonymous ? "Anonymous" : fullname}</p>
           <p className="username">
-            {/* {!isAnonymous && <Link to={`/${username}`}>@{username}</Link>} */}
-            @{username}
+            {!isAnonymous && <Link to={`/${username}`}>@{username}</Link>}
           </p>
           <p
             className="date"

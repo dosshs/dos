@@ -1,8 +1,10 @@
 const Announcement = require("../../../models/Content/Announcement");
 const AnnouncementComment = require("../../../models/Content Interaction/Announcement/AnnouncementComment");
 const AnnouncementReply = require("../../../models/Content Interaction/Announcement/AnnouncementReply");
+const AppError = require("../../../Utilities/appError");
+const catchAsync = require("../../../Utilities/catchAsync");
 
-const commentAnnouncement = async (req, res) => {
+const commentAnnouncement = catchAsync(async (req, res, next) => {
   const {
     profilePicture,
     userId,
@@ -33,171 +35,147 @@ const commentAnnouncement = async (req, res) => {
       content,
     });
   } else {
-    return res.status(204).json({ message: "Comment Unidentified" });
+    return next(new AppError("Comment Unidentified", 204));
   }
 
-  try {
-    await comment.save();
+  await comment.save();
 
-    if (announcementId) {
-      updatedModel = await Announcement.findByIdAndUpdate(
-        announcementId,
-        { $push: { comments: comment._id } },
-        { new: true }
-      );
-    } else if (announcementCommentId) {
-      updatedModel = await AnnouncementComment.findByIdAndUpdate(
-        announcementCommentId,
-        { $push: { comments: comment._id } },
-        { new: true }
-      );
-    }
-
-    return res.status(200).json({
-      message: "Announcement commented Successfully",
-      comment,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
+  if (announcementId) {
+    updatedModel = await Announcement.findByIdAndUpdate(
+      announcementId,
+      { $push: { comments: comment._id } },
+      { new: true }
+    );
+  } else if (announcementCommentId) {
+    updatedModel = await AnnouncementComment.findByIdAndUpdate(
+      announcementCommentId,
+      { $push: { comments: comment._id } },
+      { new: true }
+    );
   }
-};
 
-const getAnnouncementComments = async (req, res) => {
+  return res.status(200).json({
+    message: "Announcement commented Successfully",
+    comment,
+  });
+});
+
+const getAnnouncementComments = catchAsync(async (req, res, next) => {
   const { announcementId, announcementCommentId } = req.query;
 
   if (!announcementId && !announcementCommentId)
-    return res.status(400).json({
-      message:
+    return next(
+      new AppError(
         "Bad Request: Could not identify if Announcement or Announcement Comment",
-    });
+        400
+      )
+    );
 
-  try {
-    let comments = [];
-    if (announcementId) {
-      const announcement = await Announcement.findById(announcementId);
+  let comments = [];
+  if (announcementId) {
+    const announcement = await Announcement.findById(announcementId);
 
-      if (!announcement)
-        return res.status(404).json({
-          message: "Announcement does not have comments",
-        });
+    if (!announcement)
+      return res.status(200).json({
+        message: "Announcement does not have comments",
+      });
 
-      comments = await Promise.all(
-        announcement.comments.map(async (id) => {
-          const comment = await AnnouncementComment.findById(id);
-          return comment;
-        })
-      );
-    } else if (announcementCommentId) {
-      const announcementComment = await AnnouncementComment.findById(
-        announcementCommentId
-      );
+    comments = await Promise.all(
+      announcement.comments.map(async (id) => {
+        const comment = await AnnouncementComment.findById(id);
+        return comment;
+      })
+    );
+  } else if (announcementCommentId) {
+    const announcementComment = await AnnouncementComment.findById(
+      announcementCommentId
+    );
 
-      if (!announcementComment)
-        return res.status(404).json({
-          message: "Comment does not have replies",
-        });
+    if (!announcementComment)
+      return res.status(200).json({
+        message: "Comment does not have replies",
+      });
 
-      comments = await Promise.all(
-        announcementComment.comments.map(async (id) => {
-          const comment = await AnnouncementReply.findById(id);
-          return comment;
-        })
-      );
-    }
-
-    return res.status(200).json({
-      comments,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
+    comments = await Promise.all(
+      announcementComment.comments.map(async (id) => {
+        const comment = await AnnouncementReply.findById(id);
+        return comment;
+      })
+    );
   }
-};
 
-const getAnnouncementCommentCount = async (req, res) => {
+  return res.status(200).json({
+    comments,
+  });
+});
+
+const getAnnouncementCommentCount = catchAsync(async (req, res, next) => {
   const { announcementId, announcementCommentId } = req.query;
 
   if (!announcementId && !announcementCommentId)
-    return res.status(400).json({
-      message:
+    return next(
+      new AppError(
         "Bad Request: Could not identify if Announcement or Announcement Comment",
-    });
+        400
+      )
+    );
 
-  try {
-    let commentCount;
+  let commentCount;
 
-    if (announcementId) {
-      const announcement = await Announcement.findById(announcementId);
-      commentCount = announcement.comments.length;
-    } else if (announcementCommentId) {
-      const announcementComment = await AnnouncementComment.findById(
-        announcementCommentId
-      );
-      commentCount = announcementComment.comments.length;
-    }
-
-    return res.status(200).json({
-      commentCount,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
+  if (announcementId) {
+    const announcement = await Announcement.findById(announcementId);
+    commentCount = announcement.comments.length;
+  } else if (announcementCommentId) {
+    const announcementComment = await AnnouncementComment.findById(
+      announcementCommentId
+    );
+    commentCount = announcementComment.comments.length;
   }
-};
 
-const deleteComment = async (req, res) => {
+  return res.status(200).json({
+    commentCount,
+  });
+});
+
+const deleteComment = catchAsync(async (req, res, next) => {
   const { announcementCommentId, announcementReplyId } = req.query;
 
-  try {
-    let comment;
-    if (announcementCommentId) {
-      comment = await AnnouncementComment.findById(announcementCommentId);
-      if (!comment)
-        return res.status(404).json({
-          message: "Announcement Comment not found",
-        });
+  let comment;
+  if (announcementCommentId) {
+    comment = await AnnouncementComment.findById(announcementCommentId);
+    if (!comment)
+      return next(new AppError("Announcement comment not found", 404));
 
-      await Announcement.findByIdAndUpdate(
-        comment.announcementId,
-        { $pull: { comments: comment._id } },
-        { new: true }
-      );
-    } else if (announcementReplyId) {
-      comment = await AnnouncementReply.findById(announcementReplyId);
-      if (!comment)
-        return res.status(404).json({
-          message: "Announcement Comment not found",
-        });
+    await Announcement.findByIdAndUpdate(
+      comment.announcementId,
+      { $pull: { comments: comment._id } },
+      { new: true }
+    );
+  } else if (announcementReplyId) {
+    comment = await AnnouncementReply.findById(announcementReplyId);
+    if (!comment)
+      return next(new AppError("Announcement comment not found", 404));
 
-      await AnnouncementComment.findByIdAndUpdate(
-        comment.announcementCommentId,
-        { $pull: { comments: comment._id } },
-        { new: true }
-      );
-    } else {
-      return res.status(400).json({
-        message:
-          "Bad Request: Could not identify if Announcement Comment or Announcement Reply",
-      });
-    }
-
-    await comment.deleteOne();
-
-    if (comment) {
-      return res.status(200).json({
-        message: "Comment deleted successfully",
-      });
-    } else {
-      return res.status(404).json({
-        message: "Comment does not exist",
-      });
-    }
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
+    await AnnouncementComment.findByIdAndUpdate(
+      comment.announcementCommentId,
+      { $pull: { comments: comment._id } },
+      { new: true }
+    );
+  } else {
+    return next(
+      new AppError(
+        "Bad Request: Could not identify if Announcement or Announcement Comment",
+        400
+      )
+    );
   }
-};
+
+  await comment.deleteOne();
+
+  return res.status(200).json({
+    message: "Comment deleted successfully",
+  });
+});
 
 module.exports = {
   commentAnnouncement,

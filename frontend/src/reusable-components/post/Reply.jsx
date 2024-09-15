@@ -4,6 +4,7 @@ import "./Reply.css";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { URL } from "../../App";
+import { Link } from "react-router-dom";
 
 export default function Reply({
   fullname,
@@ -14,6 +15,7 @@ export default function Reply({
   userUsername,
   userFullName,
   isPost,
+  isReplyAnonymous,
 }) {
   const token = Cookies.get("token");
   const userId = Cookies.get("userId");
@@ -191,6 +193,7 @@ export default function Reply({
       userId: userId,
       fullname: userFullName,
       username: userUsername,
+      isAnonymous: isAnonymous,
       content: reply,
     };
 
@@ -234,12 +237,12 @@ export default function Reply({
           ></div>
           <div className="post-author">
             <p className="display-name">
-              {/*isAnonymous ? "Anonymous" : fullname*/}
-              {fullname}
+              {isReplyAnonymous ? "Anonymous" : fullname}
             </p>
             <p className="username">
-              {/* {!isAnonymous && <Link to={`/${username}`}>@{username}</Link>} */}
-              @{username}
+              {!isReplyAnonymous && (
+                <Link to={`/${username}`}>@{username}</Link>
+              )}
             </p>
             <p
               className="date"
@@ -322,18 +325,20 @@ export default function Reply({
                 }}
               ></textarea>
             </div>
-            <div className="mr-4">
-              <input
-                type="checkbox"
-                id="isAnonymous"
-                className="mr-1"
-                value={isAnonymous}
-                onClick={(e) => {
-                  setIsAnonymous(e.target.checked);
-                }}
-              />
-              <label htmlFor="isAnonymous">Post Anonymously</label>
-            </div>
+            {isPost && (
+              <div className="mr-4">
+                <input
+                  type="checkbox"
+                  id="isAnonymous"
+                  className="mr-1"
+                  value={isAnonymous}
+                  onClick={(e) => {
+                    setIsAnonymous(e.target.checked);
+                  }}
+                />
+                <label htmlFor="isAnonymous">Post Anonymously</label>
+              </div>
+            )}
             <button className="reply-btn" onClick={submitReply}>
               Reply
             </button>
@@ -350,6 +355,7 @@ export default function Reply({
                 content={el.content}
                 date={el.dateCreated}
                 userUsername={userUsername}
+                isAnonymous={el.isAnonymous}
                 isPost={isPost}
               />
             ))}

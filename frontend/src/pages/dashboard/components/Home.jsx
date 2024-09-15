@@ -144,12 +144,12 @@ export default function Home({ fullname, username, userId }) {
           </span>
           <span
             className={
-              postFilter === "66e2581e0df49e37167eccfe"
+              postFilter === "66e6f39de181020d4c6fd0aa"
                 ? "--chip active-chip"
                 : "--chip"
             }
             onClick={() => {
-              setPostFilter("66e2581e0df49e37167eccfe");
+              setPostFilter("66e6f39de181020d4c6fd0aa");
               // console.log(postFilter);
             }}
           >
@@ -157,12 +157,12 @@ export default function Home({ fullname, username, userId }) {
           </span>
           <span
             className={
-              postFilter === "66e259e9561b417005c970e0"
+              postFilter === "66e6f3e9e181020d4c6fd0ae"
                 ? "--chip active-chip"
                 : "--chip"
             }
             onClick={() => {
-              setPostFilter("66e259e9561b417005c970e0");
+              setPostFilter("66e6f3e9e181020d4c6fd0ae");
               // console.log(postFilter);
             }}
           >
@@ -170,12 +170,12 @@ export default function Home({ fullname, username, userId }) {
           </span>
           <span
             className={
-              postFilter === "66e259ff561b417005c970f1"
+              postFilter === "66e6f3fbe181020d4c6fd0b1"
                 ? "--chip active-chip"
                 : "--chip"
             }
             onClick={() => {
-              setPostFilter("66e259ff561b417005c970f1");
+              setPostFilter("66e6f3fbe181020d4c6fd0b1");
               // console.log(postFilter);
             }}
           >
@@ -183,12 +183,12 @@ export default function Home({ fullname, username, userId }) {
           </span>
           <span
             className={
-              postFilter === "66e25a0d561b417005c970f4"
+              postFilter === "66e6f408e181020d4c6fd0b4"
                 ? "--chip active-chip"
                 : "--chip"
             }
             onClick={() => {
-              setPostFilter("66e25a0d561b417005c970f4");
+              setPostFilter("66e6f408e181020d4c6fd0b4");
               // console.log(postFilter);
             }}
           >
@@ -196,12 +196,12 @@ export default function Home({ fullname, username, userId }) {
           </span>
           <span
             className={
-              postFilter === "66e25a1b561b417005c970f7"
+              postFilter === "66e6f395e181020d4c6fd0a7"
                 ? "--chip active-chip"
                 : "--chip"
             }
             onClick={() => {
-              setPostFilter("66e25a1b561b417005c970f7");
+              setPostFilter("66e6f395e181020d4c6fd0a7");
               // console.log(postFilter);
             }}
           >

@@ -287,11 +287,11 @@ function NonAdminAnnouncement({ fullname, username, userId, section, admin }) {
               <PostSkeleton cards={2} />
             ) : postFilter === 0 && fetched ? (
               announcements
-                .filter((el) => el.category !== "66e25b1634b4c8b76f3e1542")
+                .filter((el) => el.category !== "66e6f45ce181020d4c6fd0bd")
                 .filter(
                   (announce) =>
-                    announce.category === "66e25b2b34b4c8b76f3e1546" ||
-                    announce.category === "66e25b3934b4c8b76f3e1549"
+                    announce.category === "66e6f464e181020d4c6fd0c0" ||
+                    announce.category === "66e702294e3516f54be26c7a"
                 )
                 .map((el) => (
                   <Announce
@@ -341,7 +341,7 @@ function NonAdminAnnouncement({ fullname, username, userId, section, admin }) {
                 ))
             )}
             {announcements.filter(
-              (el) => el.category !== "66e25b2b34b4c8b76f3e1546"
+              (el) => el.category !== "66e6f45ce181020d4c6fd0bd"
             ).length < 1 &&
               fetched && (
                 <h2 style={{ textAlign: "center" }}>
