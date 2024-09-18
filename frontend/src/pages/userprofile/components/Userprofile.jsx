@@ -49,7 +49,7 @@ export default function Userprofile({ userLoggedIn }) {
             },
           }
         );
-        console.log(userResponse.data);
+
         setUser(userResponse.data.other);
       } catch (error) {
         setUserFound(false);
@@ -75,7 +75,7 @@ export default function Userprofile({ userLoggedIn }) {
       const getAnnouncementLikesPromises = announcement.data.map(
         async (announcement) => {
           const likeCountResponse = await axios.get(
-            `${URL}/announcement/like/count/${announcement._id}`,
+            `${URL}/announcement/like/count?announcementId=${announcement._id}`,
             {
               headers: {
                 Authorization: token,
@@ -134,7 +134,7 @@ export default function Userprofile({ userLoggedIn }) {
 
       const getPostLikesPromises = post.data.map(async (post) => {
         const likeCountResponse = await axios.get(
-          `${URL}/post/like/count/${post._id}`,
+          `${URL}/post/like/count?postId=${post._id}`,
           {
             headers: {
               Authorization: token,
@@ -363,11 +363,9 @@ export default function Userprofile({ userLoggedIn }) {
                     filteredAnnouncements
                       .filter(
                         (announce) =>
-                          announce.category === 0 ||
-                          announce.category === 1 ||
-                          announce.category === 2 ||
-                          announce.category === strand ||
-                          announce.category === classSection
+                          announce.category === "66e6f45ce181020d4c6fd0bd" ||
+                          announce.category === "66e6f464e181020d4c6fd0c0" ||
+                          announce.category === "66e702294e3516f54be26c7a"
                       )
                       .map((el) => (
                         <Announce
