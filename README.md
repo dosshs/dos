@@ -1,4 +1,4 @@
-![dos logo](frontend/src/assets/images/DOS.png)
+<p align="center"><a href="https://dosshs.online" target="_blank" rel="noopener noreferrer"><img src="frontend/src/assets/images/DOS.png" alt="re-frame logo"></a></p>
 
 Crafted with passion and great skills by the brilliant minds of ICT 12-2, DOS is not just an app; it's a social revolution! 💻📱
 
