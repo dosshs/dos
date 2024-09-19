@@ -20,9 +20,20 @@ const user_signup = catchAsync(async (req, res, next) => {
   //Save User and Respond
   await newUser.save();
 
-  const expiration = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
+  const expiration = Math.floor(Date.now() / 1000) + 24 * 60 * 60;
   const payload = { user: JSON.stringify(newUser), exp: expiration };
   const token = jwt.sign(payload, KEY);
+
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_TEMP_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+
+  res.cookie("tempToken", token, cookieOptions);
 
   return res.status(200).json({
     message: "Signed Up Successfully",
@@ -94,7 +105,7 @@ const user_find = catchAsync(async (req, res, next) => {
     __v,
     ...other
   } = user._doc;
-  res.status(200).json({ message: "User Fetched", other });
+  return res.status(200).json({ message: "User Fetched", other });
 });
 
 const user_recover = catchAsync(async (req, res, next) => {
@@ -118,10 +129,20 @@ const user_recover = catchAsync(async (req, res, next) => {
   const expiration = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
   const payload = { user: JSON.stringify(user), exp: expiration };
   const token = jwt.sign(payload, KEY);
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() +
+        process.env.JWT_TEMP_COOKIE_EXPIRES_IN * 30 * 24 * 60 * 60 * 1000
+    ), // 30 days
+    httpOnly: true,
+  };
 
-  return res
-    .status(200)
-    .json({ message: "Account Successfully Recovered", token: token });
+  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+
+  res.cookie("token", token, cookieOptions);
+  res.cookie("userId", user._id, cookieOptions);
+
+  return res.status(200).json({ message: "Account Successfully Recovered" });
 });
 
 module.exports = {

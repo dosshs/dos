@@ -24,7 +24,6 @@ const user_get = catchAsync(async (req, res, next) => {
     verificationToken,
     verificationTokenExpiry,
     password,
-    isAdmin,
     __v,
     ...other
   } = user._doc;
@@ -122,6 +121,16 @@ const user_update = catchAsync(async (req, res, next) => {
   const expiration = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
   const payload = { user: JSON.stringify(updatedUser), exp: expiration };
   const token = jwt.sign(payload, KEY);
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_TEMP_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+
+  res.cookie("tempToken", token, cookieOptions);
 
   return res
     .status(200)
