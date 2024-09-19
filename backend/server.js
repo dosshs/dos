@@ -12,6 +12,7 @@ process.on("uncaughtException", (err) => {
 
 const port = 5555;
 dotenv.config();
+
 const app = require("./app");
 
 mongoose

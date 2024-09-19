@@ -101,9 +101,10 @@ const UserSchema = new mongoose.Schema({
     index: "text",
   },
   profilePicture: String,
-  isAdmin: {
-    type: Boolean,
-    default: false,
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
   },
   accountVerification: {
     type: Boolean,
