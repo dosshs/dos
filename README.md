@@ -44,7 +44,7 @@ dos\frontend> npm run dev
 backend
 
 ```javascript
-dos\frontend> npm start
+dos\backend> npm start
 ```
 
 ## Contributing
