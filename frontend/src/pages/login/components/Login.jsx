@@ -51,6 +51,11 @@ export default function Login({}) {
     setIsLoggedIn(!isLoggedIn);
   }
 
+  // School Details
+  const [departments, setDepartments] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [sections, setSections] = useState([]);
+
   function validate_email(email) {
     let expression = /^[^@]+@\w+(\.\w+)+\w$/;
     if (expression.test(email) == true) {
@@ -125,7 +130,14 @@ export default function Login({}) {
       setSteps((prevStep) => prevStep + 1);
       setSignUpBtnMsg("NEXT");
     } else if (steps === 1) {
-      if (!firstName || !lastName || section === undefined)
+      if (
+        !firstName ||
+        !lastName ||
+        branch === undefined ||
+        department === undefined ||
+        course === undefined ||
+        section === undefined
+      )
         return setErrorMsg("Please fill out the fields");
       else if (firstName.length < 2 || lastName.length < 2) {
         return setErrorMsg(
@@ -135,7 +147,10 @@ export default function Login({}) {
         const user = {
           firstname: firstName,
           lastname: lastName,
-          section: section,
+          branchId: branch,
+          departmentId: department,
+          courseId: course,
+          sectionId: section,
         };
         setSignUpBtnMsg("Sending you a code...");
         try {
@@ -221,6 +236,72 @@ export default function Login({}) {
     }
   }
 
+  // Fetch departments when branch changes
+  useEffect(() => {
+    if (branch) {
+      async function fetchDepartments() {
+        try {
+          const res = await axios.get(
+            `${URL}/user/detail?identifier=department`,
+            {
+              headers: {
+                Authorization: Cookies.get("tempToken"),
+              },
+            }
+          );
+          setDepartments(res.data.detail);
+        } catch (err) {
+          console.error("Failed to fetch departments:", err);
+        }
+      }
+      fetchDepartments();
+    }
+  }, [branch]);
+
+  // Fetch courses when department changes
+  useEffect(() => {
+    if (department) {
+      async function fetchCourses() {
+        try {
+          const res = await axios.get(
+            `${URL}/user/detail?identifier=course&branchId=${branch}`,
+            {
+              headers: {
+                Authorization: Cookies.get("tempToken"),
+              },
+            }
+          );
+          setCourses(res.data.detail);
+        } catch (err) {
+          console.error("Failed to fetch courses:", err);
+        }
+      }
+      fetchCourses();
+    }
+  }, [department]);
+
+  // Fetch sections when course changes
+  useEffect(() => {
+    if (course) {
+      async function fetchSections() {
+        try {
+          const res = await axios.get(
+            `${URL}/user/detail?identifier=section&courseId=${course}`,
+            {
+              headers: {
+                Authorization: Cookies.get("tempToken"),
+              },
+            }
+          );
+          setSections(res.data.detail);
+        } catch (err) {
+          console.error("Failed to fetch sections:", err);
+        }
+      }
+      fetchSections();
+    }
+  }, [course]);
+
   useEffect(() => {
     localStorage.setItem("isInSignInPage", isInSignInPage);
   }, [isInSignInPage]);
@@ -261,6 +342,117 @@ export default function Login({}) {
                   <LoginForm handleIsLoggedIn={handleIsLoggedIn} />
 
                   {/* SWITCH BETWEEN LOGIN AND SIGNUP (PHONE) */}
+
+                  {/*
+                      <select
+                        className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+                        style={{
+                          borderColor: "#4f709c",
+                          backgroundColor: "white",
+                          color: "#000",
+                        }}
+                        value={branch}
+                        onChange={(e) => {
+                          setBranch(e.target.value);
+                        }}
+                      >
+                        <option value={null}>Branch</option>
+                        <option value={"66e6f1191b7f9e7e693ee751"}>
+                          Sta. Mesa
+                        </option>
+                      </select>
+                      {branch && (
+                        <select
+                          className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+                          style={{
+                            borderColor: "#4f709c",
+                            backgroundColor: "white",
+                            color: "#000",
+                          }}
+                          value={department}
+                          onChange={(e) => {
+                            setDepartment(e.target.value);
+                          }}
+                        >
+                          <option value={null}>Department</option>
+                          {/* <option value={"66e6f16d1b7f9e7e693ee754"}>
+                            CCIS
+                          </option> 
+                          {departments === null ? (
+                            <option value={null}>Loading...</option>
+                          ) : (
+                            departments.map((dept) => (
+                              <option key={dept._id} value={dept._id}>
+                                {dept.departmentName}
+                              </option>
+                            ))
+                          )}
+                        </select>
+                      )}
+                      {department && (
+                        <select
+                          className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+                          style={{
+                            borderColor: "#4f709c",
+                            backgroundColor: "white",
+                            color: "#000",
+                          }}
+                          value={course}
+                          onChange={(e) => {
+                            setCourse(e.target.value);
+                          }}
+                        >
+                          <option value={null}>Course</option>
+                          {/* <option value={"66e6f1aa1b7f9e7e693ee75a"}>
+                            Computer Science
+                          </option>
+                          <option value={"66e6f19d1b7f9e7e693ee757"}>
+                            Information Technology
+                          </option> *
+                          {courses === null ? (
+                            <option value={null}>Loading...</option>
+                          ) : (
+                            courses.map((course) => (
+                              <option key={course._id} value={course._id}>
+                                {course.shorthand}
+                              </option>
+                            ))
+                          )}
+                        </select>
+                      )}
+                      {course && (
+                        <select
+                          className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+                          style={{
+                            borderColor: "#4f709c",
+                            backgroundColor: "white",
+                            color: "#000",
+                          }}
+                          value={section}
+                          onChange={(e) => {
+                            setSection(e.target.value);
+                          }}
+                        >
+                          <option value={null}>Section</option>
+                          {/* <option value={"66e6f29ee181020d4c6fd05c"}>
+                            CS 1-1
+                          </option>
+                          <option value={"66e6f2ace181020d4c6fd068"}>
+                            CS 1-5
+                          </option> 
+                          {sections === null ? (
+                            <option value={null}>Loading...</option>
+                          ) : (
+                            sections.map((section) => (
+                              <option key={section._id} value={section._id}>
+                                {section.sectionName}
+                              </option>
+                            ))
+                          )}
+                        </select>
+                      )}
+
+                      */}
 
                   <div className="text-loginBlue">
                     <p className="inline-block">

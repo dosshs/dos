@@ -14,7 +14,7 @@ export default function CreateAnnouncement({
   onModalClose,
 }) {
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState("66e25b2b34b4c8b76f3e1546");
+  const [category, setCategory] = useState("66e6f464e181020d4c6fd0c0");
   const [isCreatingAnnouncement, setIsCreatingAnnouncement] =
     useState("Announce");
   const [announcing, setAnnouncing] = useState(false);
@@ -200,11 +200,11 @@ export default function CreateAnnouncement({
                   setCategory(e.target.value);
                 }}
               >
-                <option value="66e25b2b34b4c8b76f3e1546">PUP</option>
+                <option value="66e6f464e181020d4c6fd0c0">PUP</option>
                 {admin ? (
-                  <option value="66e25b1634b4c8b76f3e1542">DOS</option>
+                  <option value="66e6f45ce181020d4c6fd0bd">DOS</option>
                 ) : null}
-                <option value="66e25b3934b4c8b76f3e1549">CCIS</option>
+                <option value="66e702294e3516f54be26c7a">CCIS</option>
                 {strand ? <option value={strand}>{strandName}</option> : null}
                 {classSection ? (
                   <option value={classSection}>{className}</option>

@@ -1,40 +1,45 @@
 const User = require("../../models/User/User");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const AppError = require("../../Utilities/appError");
+const catchAsync = require("../../Utilities/catchAsync");
 
 const createVerificationToken = (length) => {
   return crypto.randomBytes(length).toString("hex");
 };
-const sendEmailVerificationMail = async (req, res) => {
-  const { userId } = req.params;
-  try {
-    //Generate Token
-    const verificationToken = createVerificationToken(3);
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { verificationToken: verificationToken },
-      { new: true }
-    );
+const sendEmailVerificationMail = catchAsync(async (req, res, next) => {
+  const { userId } = req.query;
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.zoho.com",
-      port: 465,
-      secure: true, // true for SSL, false for TLS
-      auth: {
-        user: process.env.ZOHO_USER,
-        pass: process.env.ZOHO_PASS,
-      },
-    });
+  //Generate Token
+  const verificationToken = createVerificationToken(3);
 
-    const mailOptions = {
-      from: {
-        name: "DOS",
-        address: process.env.ZOHO_USER,
-      },
-      to: user.email,
-      subject: "Welcome to DOS",
-      html: `<!DOCTYPE html>
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { verificationToken: verificationToken },
+    { new: true }
+  );
+
+  if (!user) return next(new AppError("User not found", 404));
+
+  const transporter = nodemailer.createTransport({
+    host: "smtp.zoho.com",
+    port: 465,
+    secure: true, // true for SSL, false for TLS
+    auth: {
+      user: process.env.ZOHO_USER,
+      pass: process.env.ZOHO_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: {
+      name: "DOS",
+      address: process.env.ZOHO_USER,
+    },
+    to: user.email,
+    subject: "Welcome to DOS",
+    html: `<!DOCTYPE html>
         <html>
           <head>
             <style>
@@ -110,54 +115,52 @@ const sendEmailVerificationMail = async (req, res) => {
           </body>
         </html>           
             `,
-    };
-    transporter.sendMail(mailOptions, () => {
-      return res.status(200).json({
-        message: "Email sent successfully",
-        verificationToken: verificationToken,
-      });
+  };
+  transporter.sendMail(mailOptions, () => {
+    return res.status(200).json({
+      message: "Email sent successfully",
+      verificationToken: verificationToken,
     });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
-};
+  });
+});
 
-const sendAccountVerificationMail = async (req, res) => {
-  const { userId } = req.params;
-  try {
-    const verificationToken = createVerificationToken(3);
-    const verificationTokenExpiry = new Date(
-      new Date().getTime() + 5 * 60 * 1000
-    );
+const sendAccountVerificationMail = async (req, res, next) => {
+  const { userId } = req.query;
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      {
-        verificationToken: verificationToken,
-        verificationTokenExpiry: verificationTokenExpiry,
-      }, // New data to set
-      { new: true } // Return the updated document
-    );
+  const verificationToken = createVerificationToken(3);
+  const verificationTokenExpiry = new Date(
+    new Date().getTime() + 5 * 60 * 1000
+  );
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.zoho.com",
-      port: 465,
-      secure: true, // true for SSL, false for TLS
-      auth: {
-        user: process.env.ZOHO_USER,
-        pass: process.env.ZOHO_PASS,
-      },
-    });
+  const user = await User.findByIdAndUpdate(
+    userId,
+    {
+      verificationToken: verificationToken,
+      verificationTokenExpiry: verificationTokenExpiry,
+    }, // New data to set
+    { new: true } // Return the updated document
+  );
 
-    const mailOptions = {
-      from: {
-        name: "DOS",
-        address: process.env.ZOHO_USER,
-      },
-      to: user.email,
-      subject: "Verification code to reset your DOS password",
-      html: `<!DOCTYPE html>
+  if (!user) return next(new AppError("User not found", 404));
+
+  const transporter = nodemailer.createTransport({
+    host: "smtp.zoho.com",
+    port: 465,
+    secure: true, // true for SSL, false for TLS
+    auth: {
+      user: process.env.ZOHO_USER,
+      pass: process.env.ZOHO_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: {
+      name: "DOS",
+      address: process.env.ZOHO_USER,
+    },
+    to: user.email,
+    subject: "Verification code to reset your DOS password",
+    html: `<!DOCTYPE html>
       <html>
         <head>
           <style>
@@ -230,17 +233,13 @@ const sendAccountVerificationMail = async (req, res) => {
         </body>
       </html>
       `,
-    };
-    transporter.sendMail(mailOptions, async () => {
-      return await res.status(200).json({
-        message: "Email sent successfully",
-        verificationToken: verificationToken,
-      });
+  };
+  transporter.sendMail(mailOptions, async () => {
+    return await res.status(200).json({
+      message: "Email sent successfully",
+      verificationToken: verificationToken,
     });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal Server Error", err });
-  }
+  });
 };
 
 module.exports = {

@@ -60,30 +60,22 @@ const UserSchema = new mongoose.Schema({
     required: true,
     min: 6,
   },
-  branchId: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Branch",
-    },
-  ],
-  departmentId: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Department",
-    },
-  ],
-  courseId: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",
-    },
-  ],
-  sectionId: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Section",
-    },
-  ],
+  branchId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Branch",
+  },
+  departmentId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Department",
+  },
+  courseId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Course",
+  },
+  sectionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Section",
+  },
   friends: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -109,9 +101,10 @@ const UserSchema = new mongoose.Schema({
     index: "text",
   },
   profilePicture: String,
-  isAdmin: {
-    type: Boolean,
-    default: false,
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
   },
   accountVerification: {
     type: Boolean,

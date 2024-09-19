@@ -36,25 +36,28 @@ export default function Userprofile({ userLoggedIn }) {
     (el) => el.username === user.username
   );
 
-
   const fetchUser = async () => {
     try {
       await axios.get(`${URL}/auth/find?account=${username}`);
+
+      try {
+        const userResponse = await axios.get(
+          `${URL}/user?username=${username}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+
+        setUser(userResponse.data.other);
+      } catch (error) {
+        setUserFound(false);
+        console.error("Error fetching user:", error);
+      }
     } catch (err) {
       setUserFound(false);
       return console.error(err);
-    }
-
-    try {
-      const userResponse = await axios.get(`${URL}/user?username=${username}`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-      setUser(userResponse.data.other);
-    } catch (error) {
-      setUserFound(false);
-      console.error("Error fetching user:", error);
     }
   };
 
@@ -72,7 +75,7 @@ export default function Userprofile({ userLoggedIn }) {
       const getAnnouncementLikesPromises = announcement.data.map(
         async (announcement) => {
           const likeCountResponse = await axios.get(
-            `${URL}/announcement/like/count/${announcement._id}`,
+            `${URL}/announcement/like/count?announcementId=${announcement._id}`,
             {
               headers: {
                 Authorization: token,
@@ -131,7 +134,7 @@ export default function Userprofile({ userLoggedIn }) {
 
       const getPostLikesPromises = post.data.map(async (post) => {
         const likeCountResponse = await axios.get(
-          `${URL}/post/like/count/${post._id}`,
+          `${URL}/post/like/count?postId=${post._id}`,
           {
             headers: {
               Authorization: token,
@@ -181,12 +184,11 @@ export default function Userprofile({ userLoggedIn }) {
     fetchPosts();
   };
 
-  
   const setStrandandClass = () => {
     if (section === 1 || section === 2) {
-      setStrand(3)
+      setStrand(3);
     } else if (section >= 3 && section <= 13) {
-      setStrand(6)
+      setStrand(6);
     } else if (section >= 14 && section <= 22) {
       setStrand(18);
     } else if (section === 23 || section === 24) {
@@ -194,15 +196,15 @@ export default function Userprofile({ userLoggedIn }) {
     }
 
     if (section === 1) {
-      setClassSection(4)
+      setClassSection(4);
     } else if (section === 2) {
-      setClassSection(5)
+      setClassSection(5);
     } else if (section === 3) {
-      setClassSection(7)
+      setClassSection(7);
     } else if (section === 4) {
-      setClassSection(8)
+      setClassSection(8);
     } else if (section === 5) {
-      setClassSection(9)
+      setClassSection(9);
     } else if (section === 6) {
       setClassSection(10);
     } else if (section === 7) {
@@ -245,8 +247,8 @@ export default function Userprofile({ userLoggedIn }) {
   };
 
   useEffect(() => {
-    setSection(userLoggedIn.section)
-    if(section !== 0) setStrandandClass();
+    setSection(userLoggedIn.section);
+    if (section !== 0) setStrandandClass();
   }, [userLoggedIn]);
 
   const handleAnnounceCreated = () => {
@@ -358,25 +360,32 @@ export default function Userprofile({ userLoggedIn }) {
                   {!announcementFetched ? (
                     <AnnouncementSkeleton cards={2} />
                   ) : filteredAnnouncements.length > 0 ? (
-                    filteredAnnouncements.filter((announce) => announce.category === 0 || announce.category === 1 || announce.category === 2 || announce.category === strand || announce.category === classSection).map((el) => (
-                      <Announce
-                        key={el._id}
-                        userUsername={userLoggedIn.username}
-                        userUserId={userLoggedIn._id}
-                        userFullName={userLoggedIn.fullname}
-                        announceId={el._id}
-                        fullname={el.fullname}
-                        username={el.username}
-                        content={el.content}
-                        date={el.dateCreated}
-                        liked={el.liked}
-                        likeCount={el.likeCount}
-                        likeId={el.likeId}
-                        commentCount={el.commentCount}
-                        category={el.category}
-                        isInDosAnnounce={true}
-                      />
-                    ))
+                    filteredAnnouncements
+                      .filter(
+                        (announce) =>
+                          announce.category === "66e6f45ce181020d4c6fd0bd" ||
+                          announce.category === "66e6f464e181020d4c6fd0c0" ||
+                          announce.category === "66e702294e3516f54be26c7a"
+                      )
+                      .map((el) => (
+                        <Announce
+                          key={el._id}
+                          userUsername={userLoggedIn.username}
+                          userUserId={userLoggedIn._id}
+                          userFullName={userLoggedIn.fullname}
+                          announceId={el._id}
+                          fullname={el.fullname}
+                          username={el.username}
+                          content={el.content}
+                          date={el.dateCreated}
+                          liked={el.liked}
+                          likeCount={el.likeCount}
+                          likeId={el.likeId}
+                          commentCount={el.commentCount}
+                          category={el.category}
+                          isInDosAnnounce={true}
+                        />
+                      ))
                   ) : (
                     <p className="empty">
                       {userLoggedIn.username === username
