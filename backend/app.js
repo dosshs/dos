@@ -12,7 +12,6 @@ const globalErrorHandler = require("./controller/ErrorController");
 //Routes
 //Auth Controller
 const auth = require("./routes/checkAuth");
-const checkAuth = require("./routes/checkToken");
 
 //Account Routes
 const authRoute = require("./routes/Account/auth");
@@ -77,7 +76,6 @@ app.use("/api/search", auth, searchRoute);
 
 //Others
 app.use("/api/alive", aliveRoute);
-app.use("/api/jwt", auth, checkAuth);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
