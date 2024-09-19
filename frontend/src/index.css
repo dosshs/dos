@@ -24,7 +24,7 @@
 
   input[type="text"],
   input[type="password"] {
-    @apply w-5/6 p-2 rounded-full border-t-2 border-t-loginBlue focus:outline-black;
+    @apply w-5/6 lg:w-4/6 p-2 rounded-full border-t-[0.2rem] border-l-[0.1rem] border-r-[0.1rem] border-t-loginBlue border-l-loginBlue border-r-loginBlue focus:outline-black;
   }
 
   .--chip {
@@ -40,6 +40,12 @@
       @apply text-xs;
     }
   }
+
+  /* @media (min-width: 1280px) {
+    html {
+      @apply text-lg;
+    }
+  } */
 }
 
 ::-webkit-scrollbar {

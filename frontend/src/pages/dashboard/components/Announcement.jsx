@@ -23,6 +23,7 @@ export default function Announcements({
 
   const fetchPosts = async () => {
     try {
+      console.log("test");
       const announcement = await axios.get(`${URL}/announcement`, {
         headers: {
           Authorization: token,
