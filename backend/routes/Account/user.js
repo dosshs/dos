@@ -9,10 +9,10 @@ const schoolDetailController = require("../../controller/Account/SchoolDetailCon
 router.get("/", userController.user_get);
 
 //Update User
-router.put("/:userId", userController.user_update);
+router.put("/", userController.user_update);
 
 //Delete User
-router.delete("/:id", userController.user_delete);
+router.delete("/", userController.user_delete);
 
 //================School Detail Controller =================
 // //Create Detail

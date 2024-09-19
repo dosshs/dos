@@ -37,7 +37,7 @@ const user_index = catchAsync(async (req, res, next) => {
 
 const user_delete = catchAsync(async (req, res, next) => {
   // if (req.body.userId === req.params.id || req.user.isAdmin) {
-  await User.findByIdAndDelete(req.params.id);
+  await User.findByIdAndDelete(req.query.id);
   return res.status(200).json("Account Successfully Deleted");
 
   // } else {
@@ -47,7 +47,7 @@ const user_delete = catchAsync(async (req, res, next) => {
 
 const user_update = catchAsync(async (req, res, next) => {
   const KEY = process.env.KEY;
-  const { userId } = req.params;
+  const { userId } = req.query;
 
   const user = await User.findById(userId);
 

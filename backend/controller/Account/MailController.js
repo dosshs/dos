@@ -8,8 +8,8 @@ const createVerificationToken = (length) => {
   return crypto.randomBytes(length).toString("hex");
 };
 
-const sendEmailVerificationMail = catchAsync(async (req, res) => {
-  const { userId } = req.params;
+const sendEmailVerificationMail = catchAsync(async (req, res, next) => {
+  const { userId } = req.query;
 
   //Generate Token
   const verificationToken = createVerificationToken(3);
@@ -19,6 +19,8 @@ const sendEmailVerificationMail = catchAsync(async (req, res) => {
     { verificationToken: verificationToken },
     { new: true }
   );
+
+  if (!user) return next(new AppError("User not found", 404));
 
   const transporter = nodemailer.createTransport({
     host: "smtp.zoho.com",
@@ -122,8 +124,8 @@ const sendEmailVerificationMail = catchAsync(async (req, res) => {
   });
 });
 
-const sendAccountVerificationMail = async (req, res) => {
-  const { userId } = req.params;
+const sendAccountVerificationMail = async (req, res, next) => {
+  const { userId } = req.query;
 
   const verificationToken = createVerificationToken(3);
   const verificationTokenExpiry = new Date(
@@ -138,6 +140,8 @@ const sendAccountVerificationMail = async (req, res) => {
     }, // New data to set
     { new: true } // Return the updated document
   );
+
+  if (!user) return next(new AppError("User not found", 404));
 
   const transporter = nodemailer.createTransport({
     host: "smtp.zoho.com",
