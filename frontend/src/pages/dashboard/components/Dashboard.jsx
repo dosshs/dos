@@ -41,9 +41,9 @@ export default function Dashboard({ user }) {
         <div className="dashboard">
           <div className="header">
             <div className="dosboard-and-search-container">
-              <h2 className="--big-h2">DOSBoard</h2>
+              <h2 className=" text-4xl font-extrabold">DOSBoard</h2>
             </div>
-            <h2 className="--big-h2">
+            <h2 className="text-4xl font-bold">
               Hello,{" "}
               <Link to={`/${user.username}`} className="--highlight">
                 {user.username}!
