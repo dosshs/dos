@@ -83,7 +83,7 @@ export default function EditUserInfo({
   return (
     <>
       <div
-        className="edit-userinfo-modal"
+        className="edit-userinfo-modal h-auto"
         style={{ zIndex: (isChangePasswordOpen || isSuccessModalOpen) && 1 }}
       >
         <div className="userprofile-container --edit-user-details">
