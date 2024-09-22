@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import useToggle from "../../../components/hooks/useToggle";
 import { Navigate } from "react-router-dom";
 
 import "../stylesheets/Login.css";
@@ -6,7 +7,7 @@ import "../stylesheets/Login.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { jwtDecode } from "jwt-decode";
 import AuthenticationModal from "../../../reusable-components/edituser/AuthenticationModal";
-import TermsConditions from "./TermsConditions";
+import TermsConditions from "../../../components/login/TermsConditions";
 import { URL } from "../../../App";
 
 import LoginForm from "../../../components/login/LoginForm";
@@ -17,27 +18,15 @@ export default function Login({}) {
   const [isInSignInPage, setIsInSignInPage] = useState(
     storedValue === null ? true : JSON.parse(storedValue)
   );
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
-  const [signUpBtnMsg, setSignUpBtnMsg] = useState("SIGN UP");
-  const [loginBtnMsg, setLoginBtnMsg] = useState("LOG IN");
-  const [isTermsConditionsOpen, setIsTermsConditionsOpen] = useState(false);
-
-  const [isRememberMe, setIsRememberMe] = useState(false);
-
-  //signup
+  const [isTermsConditionsOpen, toggleIsTermsConditionOpen] = useToggle();
+  const [isLoggedIn, toggleIsLoggedIn] = useToggle();
 
   //Recover Account
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [recoverEmail, setRecoverEmail] = useState("");
   const [recoverUserId, setRecoverUserId] = useState("");
-
-  function handleIsLoggedIn() {
-    setIsLoggedIn(!isLoggedIn);
-  }
 
   function validate_email(email) {
     let expression = /^[^@]+@\w+(\.\w+)+\w$/;
@@ -112,9 +101,11 @@ export default function Login({}) {
                       : "Join DOS Now!"}
                   </p>
                   {isInSignInPage ? (
-                    <LoginForm handleIsLoggedIn={handleIsLoggedIn} />
+                    <LoginForm handleIsLoggedIn={toggleIsLoggedIn} />
                   ) : (
-                    <SignupForm />
+                    <SignupForm
+                      handleTermsCondition={toggleIsTermsConditionOpen}
+                    />
                   )}
                   <div className="text-loginBlue">
                     <p className="inline-block">
@@ -167,11 +158,7 @@ export default function Login({}) {
         </div>
         {isTermsConditionsOpen && (
           <>
-            <TermsConditions
-              onCloseModal={() => {
-                setIsTermsConditionsOpen(false);
-              }}
-            />
+            <TermsConditions onCloseModal={toggleIsTermsConditionOpen} />
             <div className="overlay"></div>
           </>
         )}

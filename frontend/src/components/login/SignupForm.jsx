@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-const SignupForm = () => {
+const SignupForm = ({ handleTermsCondition }) => {
   const [steps, setSteps] = useState(0);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -278,9 +278,7 @@ const SignupForm = () => {
               textDecoration: "underline",
               cursor: "pointer",
             }}
-            onClick={() => {
-              setIsTermsConditionsOpen(true);
-            }}
+            onClick={handleTermsCondition}
           >
             terms and conditions.
           </p>
