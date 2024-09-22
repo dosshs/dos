@@ -1,11 +1,12 @@
-import { useState, useReducer, useEffect } from "react";
+import { useState, useReducer, useEffect, useRef } from "react";
 import { URL } from "../../App";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import useGetSchoolInfo from "../hooks/useGetSchoolInfo";
+// import { jwtDecode } from "jwt-decode";
 
-const SignupForm = ({ handleTermsCondition }) => {
-  const [steps, setSteps] = useState(0);
+const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
+  const [steps, setSteps] = useState(1);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -15,12 +16,46 @@ const SignupForm = ({ handleTermsCondition }) => {
   const [userId, setUserId] = useState("");
   const [code, setCode] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
-  const [branch, setBranch] = useState();
-  const [department, setDepartment] = useState();
-  const [course, setCourse] = useState();
-  const [section, setSection] = useState();
   const [errorMsg, setErrorMsg] = useState("");
   const [signUpBtnMsg, setSignUpBtnMsg] = useState("SIGN UP");
+
+  //selection inputs for school
+  const [branch, setBranch] = useState("");
+  const [department, setDepartment] = useState("");
+  const [course, setCourse] = useState("");
+  const [section, setSection] = useState("");
+
+  // School Details
+  // const [departments, setDepartments] = useState([]);
+  // const [courses, setCourses] = useState([]);
+  // const [sections, setSections] = useState([]);
+
+  //fetch department options when branch changes
+  const [departments] = useGetSchoolInfo(
+    `${URL}/user/detail?identifier=department`,
+    branch
+  );
+
+  //fetch courses options when department changed
+  const [courses] = useGetSchoolInfo(
+    `${URL}/user/detail?identifier=course&branchId=${branch}`,
+    department
+  );
+
+  //fetch section options when course changed
+  const [sections] = useGetSchoolInfo(
+    `${URL}/user/detail?identifier=section&courseId=${course}`,
+    course
+  );
+
+  function validate_email(email) {
+    let expression = /^[^@]+@\w+(\.\w+)+\w$/;
+    if (expression.test(email) == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   async function handleSignUpSubmit(e) {
     e.preventDefault();
@@ -169,71 +204,6 @@ const SignupForm = ({ handleTermsCondition }) => {
     }
   }
 
-  useEffect(() => {
-    if (branch) {
-      async function fetchDepartments() {
-        try {
-          const res = await axios.get(
-            `${URL}/user/detail?identifier=department`,
-            {
-              headers: {
-                Authorization: Cookies.get("tempToken"),
-              },
-            }
-          );
-          setDepartments(res.data.detail);
-        } catch (err) {
-          console.error("Failed to fetch departments:", err);
-        }
-      }
-      fetchDepartments();
-    }
-  }, [branch]);
-
-  // Fetch courses when department changes
-  useEffect(() => {
-    if (department) {
-      async function fetchCourses() {
-        try {
-          const res = await axios.get(
-            `${URL}/user/detail?identifier=course&branchId=${branch}`,
-            {
-              headers: {
-                Authorization: Cookies.get("tempToken"),
-              },
-            }
-          );
-          setCourses(res.data.detail);
-        } catch (err) {
-          console.error("Failed to fetch courses:", err);
-        }
-      }
-      fetchCourses();
-    }
-  }, [department]);
-
-  // Fetch sections when course changes
-  useEffect(() => {
-    if (course) {
-      async function fetchSections() {
-        try {
-          const res = await axios.get(
-            `${URL}/user/detail?identifier=section&courseId=${course}`,
-            {
-              headers: {
-                Authorization: Cookies.get("tempToken"),
-              },
-            }
-          );
-          setSections(res.data.detail);
-        } catch (err) {
-          console.error("Failed to fetch sections:", err);
-        }
-      }
-      fetchSections();
-    }
-  }, [course]);
-
   return (
     <>
       {steps === 0 ? (
@@ -293,7 +263,6 @@ const SignupForm = ({ handleTermsCondition }) => {
             }}
             placeholder="First Name"
           />
-
           <input
             type="text"
             value={lastName}
@@ -302,9 +271,8 @@ const SignupForm = ({ handleTermsCondition }) => {
             }}
             placeholder="Last Name"
           />
-
           <select
-            className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+            // className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
             style={{
               borderColor: "#4f709c",
               backgroundColor: "white",
@@ -320,7 +288,7 @@ const SignupForm = ({ handleTermsCondition }) => {
           </select>
           {branch && (
             <select
-              className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+              // className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
               style={{
                 borderColor: "#4f709c",
                 backgroundColor: "white",
@@ -346,7 +314,7 @@ const SignupForm = ({ handleTermsCondition }) => {
           )}
           {department && (
             <select
-              className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+              // className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
               style={{
                 borderColor: "#4f709c",
                 backgroundColor: "white",
@@ -378,7 +346,7 @@ const SignupForm = ({ handleTermsCondition }) => {
           )}
           {course && (
             <select
-              className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
+              // className="w-5/6 p-2 rounded-full border-t-2 border-loginBlue focus:outline-none"
               style={{
                 borderColor: "#4f709c",
                 backgroundColor: "white",

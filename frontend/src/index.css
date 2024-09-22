@@ -23,7 +23,8 @@
   }
 
   input[type="text"],
-  input[type="password"] {
+  input[type="password"],
+  select {
     @apply w-5/6 lg:w-4/6 p-2 rounded-full border-t-[0.2rem] border-l-[0.1rem] border-r-[0.1rem] border-t-loginBlue border-l-loginBlue border-r-loginBlue focus:outline-black;
   }
 
@@ -35,17 +36,11 @@
     @apply bg-chipActive text-black;
   }
 
-  @media (max-width: 400px) {
+  @media (max-width: 460px) {
     html {
       @apply text-xs;
     }
   }
-
-  /* @media (min-width: 1280px) {
-    html {
-      @apply text-lg;
-    }
-  } */
 }
 
 ::-webkit-scrollbar {

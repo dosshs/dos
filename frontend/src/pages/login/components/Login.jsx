@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import useToggle from "../../../components/hooks/useToggle";
 import { Navigate } from "react-router-dom";
-
 import "../stylesheets/Login.css";
-
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { jwtDecode } from "jwt-decode";
 import AuthenticationModal from "../../../reusable-components/edituser/AuthenticationModal";
@@ -28,14 +26,9 @@ export default function Login({}) {
   const [recoverEmail, setRecoverEmail] = useState("");
   const [recoverUserId, setRecoverUserId] = useState("");
 
-  function validate_email(email) {
-    let expression = /^[^@]+@\w+(\.\w+)+\w$/;
-    if (expression.test(email) == true) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  useEffect(() => {
+    localStorage.setItem("isInSignInPage", isInSignInPage);
+  }, [isInSignInPage]);
 
   async function handleForgotPassword(e) {
     e.preventDefault();
@@ -61,12 +54,6 @@ export default function Login({}) {
     }
   }
 
-  // Fetch departments when branch changes
-
-  useEffect(() => {
-    localStorage.setItem("isInSignInPage", isInSignInPage);
-  }, [isInSignInPage]);
-
   if (isLoggedIn) {
     return (location.href = "/");
   } else {
@@ -78,19 +65,19 @@ export default function Login({}) {
         </Helmet>
         <div className="bg-loginBg w-screen h-screen">
           <div
-            className="flex flex-col justify-between p-2 w-10/12 max-w-[480px] min-h-12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl md:flex-row md:w-5/6 md:h-[30rem]  md:bg-loginWhite md:max-w-[770px] md:p-0 lg:min-w-63rem lg:max-w-[73rem] lg:h-[37rem]"
+            className="flex flex-col justify-between p-2 w-10/12 max-w-[480px] min-h-12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl md:flex-row md:w-5/6 md:h-[31rem]  md:bg-loginWhite md:max-w-[770px] md:p-0 lg:min-w-63rem lg:max-w-[73rem] lg:h-[40rem]"
             style={{ position: "relative" }}
           >
             <div
-              className={`flex flex-col items-center justify-center h-[30rem] bg-loginWhite rounded-3xl p-4 pb-8 z-10 shadow-md shadow-black/30 ${
+              className={`flex flex-col items-center justify-center min-h-[27rem] bg-loginWhite rounded-3xl p-4 pt-8 pb-8 z-10 shadow-md shadow-black/30 ${
                 isInSignInPage ? "md:left-0" : "md:left-full"
               } ${
                 isInSignInPage ? "md:translate-x-0" : "md:-translate-x-full"
-              } md:h-full md:w-3/5 md:rounded-2xl md:shadow-none md:absolute md:z-0 md:transition-all md:ease-out md:duration-300 lg:p-28 lg:h-full`}
+              } md:h-full md:w-3/5 md:rounded-2xl md:shadow-none md:absolute md:z-0 md:transition-all md:ease-out md:duration-300 lg:p-16`}
             >
-              <form className="h-full w-full flex flex-col justify-between items-center text-xs">
+              <form className="w-full flex flex-col justify-between items-center text-xs whitespace-nowrap">
                 <div className="w-full flex flex-col items-center space-y-4">
-                  <h1 className="text-2xl font-bold lg:text-5xl">
+                  <h1 className="text-2xl font-bold text-center lg:text-5xl">
                     {isInSignInPage ? "Hello World!" : "Create Account"}
                   </h1>
                   <p className="text-xs font-bold lg:text-lg lg:font-normal">
@@ -105,6 +92,7 @@ export default function Login({}) {
                   ) : (
                     <SignupForm
                       handleTermsCondition={toggleIsTermsConditionOpen}
+                      handleIsLoggedIn={toggleIsLoggedIn}
                     />
                   )}
                   <div className="text-loginBlue">
@@ -118,15 +106,6 @@ export default function Login({}) {
                       onClick={(e) => {
                         e.preventDefault();
                         setIsInSignInPage(!isInSignInPage);
-                        setSteps(0);
-                        setEmail("");
-                        setUsername("");
-                        setPassword("");
-                        setFisrtName("");
-                        setLastName("");
-                        setSection("");
-                        setCode("");
-                        setErrorMsg("");
                       }}
                     >
                       {" "}
