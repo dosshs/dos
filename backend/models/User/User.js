@@ -76,6 +76,12 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Section",
   },
+  organizationId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Organization",
+    },
+  ],
   friends: [
     {
       type: mongoose.Schema.Types.ObjectId,

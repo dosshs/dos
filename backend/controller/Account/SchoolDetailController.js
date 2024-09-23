@@ -2,6 +2,7 @@ const Branch = require("../../models/User/Branch");
 const Department = require("../../models/User/Department");
 const Course = require("../../models/User/Course");
 const Section = require("../../models/User/Section");
+const Organization = require("../../models/User/Organization");
 const AppError = require("../../Utilities/appError");
 const catchAsync = require("../../Utilities/catchAsync");
 
@@ -13,6 +14,7 @@ const createDetail = catchAsync(async (req, res, next) => {
     courseName,
     shorthand,
     sectionName,
+    organizationName,
     branchId,
     courseId,
   } = req.body;
@@ -69,6 +71,18 @@ const createDetail = catchAsync(async (req, res, next) => {
         courseId,
         branchId,
       });
+  } else if (identifier === "organization") {
+    const organizationFind = await Organization.find({
+      organizationName,
+    });
+
+    if (organizationFind.length > 0)
+      return next(new AppError("Organization already exists", 400));
+    else
+      detail = new Organization({
+        organizationName,
+        branchId,
+      });
   } else {
     return next(new AppError("Invalid identifier", 400));
   }
@@ -76,7 +90,7 @@ const createDetail = catchAsync(async (req, res, next) => {
   await detail.save();
 
   return res.status(200).json({
-    message: "Detail Added Successfully",
+    message: `Detail ${identifier} Added Successfully`,
     detail,
   });
 });
@@ -102,6 +116,10 @@ const getDetail = catchAsync(async (req, res, next) => {
     } else if (branchId) {
       detail = await Section.find({ branchId: branchId });
     } else detail = await Section.find();
+  } else if (identifier === "organization") {
+    if (branchId) {
+      detail = await Organization.find({ branchId: branchId });
+    } else detail = await Organization.find();
   } else {
     return next(new AppError("Invalid identifier", 400));
   }
@@ -119,6 +137,7 @@ const updateDetail = catchAsync(async (req, res, next) => {
     departmentName,
     courseName,
     shorthand,
+    organizationName,
     sectionName,
     branchId,
     courseId,
@@ -159,6 +178,12 @@ const updateDetail = catchAsync(async (req, res, next) => {
       { $set: update },
       { new: true }
     );
+  } else if (identifier === "organization") {
+    detail = await Organization.findOneAndUpdate(
+      id ? { _id: id } : { organizationName: organizationName },
+      { $set: update },
+      { new: true }
+    );
   } else {
     return next(new AppError("Invalid identifier", 400));
   }
@@ -173,7 +198,14 @@ const updateDetail = catchAsync(async (req, res, next) => {
 
 const deleteDetail = catchAsync(async (req, res, next) => {
   const { identifier } = req.query;
-  const { id, branchName, departmentName, courseName, sectionName } = req.body;
+  const {
+    id,
+    branchName,
+    departmentName,
+    courseName,
+    organizationName,
+    sectionName,
+  } = req.body;
 
   let detail,
     query = {};
@@ -182,6 +214,7 @@ const deleteDetail = catchAsync(async (req, res, next) => {
   if (departmentName) query.departmentName = departmentName;
   if (courseName) query.courseName = courseName;
   if (sectionName) query.sectionName = sectionName;
+  if (sectionName) query.organizationName = organizationName;
 
   if (identifier === "branch") {
     id
@@ -199,6 +232,10 @@ const deleteDetail = catchAsync(async (req, res, next) => {
     id
       ? (detail = await Section.findByIdAndDelete(id))
       : (detail = await Section.findOneAndDelete(query));
+  } else if (identifier === "organization") {
+    id
+      ? (detail = await Organization.findByIdAndDelete(id))
+      : (detail = await Organization.findOneAndDelete(query));
   } else {
     return next(new AppError("Invalid identifier", 400));
   }
