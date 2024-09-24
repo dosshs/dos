@@ -8,6 +8,7 @@ import AuthenticationModal from "../../../reusable-components/edituser/Authentic
 import TermsConditions from "../../../components/login/TermsConditions";
 import { URL } from "../../../App";
 
+import ForgetPassword from "../../../components/login/ForgetPasswordForm";
 import LoginForm from "../../../components/login/LoginForm";
 import SignupForm from "../../../components/login/SignupForm";
 
@@ -16,43 +17,13 @@ export default function Login({}) {
   const [isInSignInPage, setIsInSignInPage] = useState(
     storedValue === null ? true : JSON.parse(storedValue)
   );
-
+  const [isForgotPassword, toggleIsForgotPassword] = useToggle();
   const [isTermsConditionsOpen, toggleIsTermsConditionOpen] = useToggle();
   const [isLoggedIn, toggleIsLoggedIn] = useToggle();
-
-  //Recover Account
-  const [isForgotPassword, setIsForgotPassword] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [recoverEmail, setRecoverEmail] = useState("");
-  const [recoverUserId, setRecoverUserId] = useState("");
 
   useEffect(() => {
     localStorage.setItem("isInSignInPage", isInSignInPage);
   }, [isInSignInPage]);
-
-  async function handleForgotPassword(e) {
-    e.preventDefault();
-    setErrorMsg("");
-    setSuccessMsg("");
-    try {
-      const user = await axios.get(
-        `${URL}/auth/find?account=${usernameOrEmail}`
-      );
-
-      if (user.status === 200) {
-        setSuccessMsg("User Found!");
-        setRecoverEmail(user.data.other.email);
-        setRecoverUserId(user.data.other._id);
-        setTimeout(() => {
-          setIsAuthModalOpen(true);
-        }, 1000);
-      } else {
-        setErrorMsg("User not found");
-      }
-    } catch (err) {
-      return console.error(err);
-    }
-  }
 
   if (isLoggedIn) {
     return (location.href = "/");
@@ -88,7 +59,15 @@ export default function Login({}) {
                       : "Join DOS Now!"}
                   </p>
                   {isInSignInPage ? (
-                    <LoginForm handleIsLoggedIn={toggleIsLoggedIn} />
+                    <>
+                      <LoginForm
+                        handleIsLoggedIn={toggleIsLoggedIn}
+                        handleToggleForgotPassword={toggleIsForgotPassword}
+                        isForgotPassword={isForgotPassword}
+                      >
+                        {isForgotPassword && <ForgetPassword />}
+                      </LoginForm>
+                    </>
                   ) : (
                     <SignupForm
                       handleTermsCondition={toggleIsTermsConditionOpen}
@@ -141,16 +120,7 @@ export default function Login({}) {
             <div className="overlay"></div>
           </>
         )}
-        {isAuthModalOpen && (
-          <>
-            <AuthenticationModal
-              onCloseAuthentication={() => setIsAuthModalOpen(!isAuthModalOpen)}
-              email={recoverEmail}
-              recoverUserId={recoverUserId}
-            />
-          </>
-        )}
-        {isAuthModalOpen && <div className="overlay"></div>}
+        {isTermsConditionsOpen && <div className="overlay"></div>}
       </HelmetProvider>
     );
   }
