@@ -1,10 +1,15 @@
-import { useReducer, useEffect, useState } from "react";
+import { useState } from "react";
 import { URL } from "../../App";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import ForgetPassword from "./ForgetPasswordForm";
 
-const LoginForm = ({ handleIsLoggedIn }) => {
+const LoginForm = ({
+  handleIsLoggedIn,
+  isForgotPassword,
+  handleToggleForgotPassword,
+}) => {
   const storedUsernameOrEmail = Cookies.get("emailOrUsername");
   const [usernameOrEmail, setUsernameOrEmail] = useState(
     storedUsernameOrEmail ? storedUsernameOrEmail : ""
@@ -15,7 +20,6 @@ const LoginForm = ({ handleIsLoggedIn }) => {
   const [successMsg, setSuccessMsg] = useState("");
   const [userId, setUserId] = useState("");
   const [isRememberMe, setIsRememberMe] = useState(false);
-  const [isForgotPassword, setIsForgotPassword] = useState(false);
 
   async function handleLogInSubmit(e) {
     setErrorMsg("");
@@ -83,57 +87,66 @@ const LoginForm = ({ handleIsLoggedIn }) => {
 
   return (
     <>
-      <input
-        type="text"
-        value={usernameOrEmail}
-        onChange={(e) => {
-          setUsernameOrEmail(e.target.value);
-        }}
-        placeholder="Enter your username or email "
-        required
-      />
-
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-        placeholder="Enter your password"
-      />
-
-      <div className="utils-container">
-        <label htmlFor="remember-me">
-          {" "}
+      {isForgotPassword ? (
+        <ForgetPassword
+          storedUsernameOrEmail={storedUsernameOrEmail}
+          handleToggleForgotPassword={handleToggleForgotPassword}
+        />
+      ) : (
+        <>
           <input
-            className="accent-loginBlue"
-            type="checkbox"
-            name="isRememberMe"
-            id="remember-me"
-            value={isRememberMe}
+            type="text"
+            value={usernameOrEmail}
             onChange={(e) => {
-              setIsRememberMe(e.target.checked);
+              setUsernameOrEmail(e.target.value);
             }}
-          />{" "}
-          Remember Me
-        </label>
-        <p
-          className="cursor-pointer text-loginBlue hover:underline"
-          onClick={() => setIsForgotPassword(!isForgotPassword)}
-        >
-          {!isForgotPassword ? "Forgot Password" : "Return to Login"}
-        </p>
-      </div>
+            placeholder="Enter your username or email "
+            required
+          />
 
-      <p className="--server-msg">{errorMsg}</p>
-      <p className="--server-success-msg">{successMsg}</p>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            placeholder="Enter your password"
+          />
 
-      <button
-        className="bg-loginBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
-        onClick={handleLogInSubmit}
-      >
-        {loginBtnMsg}
-      </button>
+          <div className="utils-container">
+            <label htmlFor="remember-me">
+              {" "}
+              <input
+                className="accent-loginBlue"
+                type="checkbox"
+                name="isRememberMe"
+                id="remember-me"
+                value={isRememberMe}
+                onChange={(e) => {
+                  setIsRememberMe(e.target.checked);
+                }}
+              />{" "}
+              Remember Me
+            </label>
+            <p
+              className="cursor-pointer text-loginBlue hover:underline"
+              onClick={handleToggleForgotPassword}
+            >
+              {!isForgotPassword ? "Forgot Password" : "Return to Login"}
+            </p>
+          </div>
+
+          <p className="--server-msg">{errorMsg}</p>
+          <p className="--server-success-msg">{successMsg}</p>
+
+          <button
+            className="bg-loginBlue text-loginWhite  p-1 w-28 rounded-full shadow-md"
+            onClick={handleLogInSubmit}
+          >
+            {loginBtnMsg}
+          </button>
+        </>
+      )}
     </>
   );
 };

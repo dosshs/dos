@@ -15,27 +15,27 @@ function App() {
   const token = Cookies.get("token");
   const [user, setUser] = useState([]);
 
-  const verifyToken = async () => {
-    try {
-      await axios.get(`${URL}/jwt/token`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-    } catch (err) {
-      if (
-        err.response.request.status === 401 ||
-        err.response.request.status === 403
-      ) {
-        Cookies.remove("token");
-        location.href = "/login";
-        return console.error(err.response.data.message);
-      } else return console.error(err.response.data.message);
-    }
-  };
+  // const verifyToken = async () => {
+  //   try {
+  //     await axios.get(`${URL}/jwt/token`, {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     });
+  //   } catch (err) {
+  //     if (
+  //       err.response.request.status === 401 ||
+  //       err.response.request.status === 403
+  //     ) {
+  //       Cookies.remove("token");
+  //       location.href = "/login";
+  //       return console.error(err.response.data.message);
+  //     } else return console.error(err.response.data.message);
+  //   }
+  // };
 
   const decodeUser = () => {
-    verifyToken();
+    // verifyToken();
     const User = jwtDecode(token);
     const parsedUser = JSON.parse(User.user);
 
