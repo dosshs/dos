@@ -6,7 +6,7 @@ import useGetSchoolInfo from "../hooks/useGetSchoolInfo";
 // import { jwtDecode } from "jwt-decode";
 
 const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
-  const [steps, setSteps] = useState(1);
+  const [steps, setSteps] = useState(0);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -102,6 +102,7 @@ const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
         };
         setSignUpBtnMsg("Signing you up...");
         try {
+          console.log(newUser);
           const res = await axios.post(`${URL}/auth/signup`, newUser);
           if (res.data.message === "Signed Up Successfully") {
             setUserId(res.data.id);
@@ -224,7 +225,14 @@ const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
             }}
             placeholder="Enter your email "
           />
-
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            placeholder="Enter your password"
+          />
           <input
             type="password"
             value={confirmPass}
@@ -300,7 +308,6 @@ const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
               }}
             >
               <option value={null}>Department</option>
-              <option value={"66e6f16d1b7f9e7e693ee754"}>CCIS</option>
               {departments === null ? (
                 <option value={null}>Loading...</option>
               ) : (
@@ -326,13 +333,6 @@ const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
               }}
             >
               <option value={null}>Course</option>
-              <option value={"66e6f1aa1b7f9e7e693ee75a"}>
-                Computer Science
-              </option>
-              <option value={"66e6f19d1b7f9e7e693ee757"}>
-                Information Technology
-              </option>{" "}
-              *
               {courses === null ? (
                 <option value={null}>Loading...</option>
               ) : (
@@ -358,8 +358,6 @@ const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
               }}
             >
               <option value={null}>Section</option>
-              <option value={"66e6f29ee181020d4c6fd05c"}>CS 1-1</option>
-              <option value={"66e6f2ace181020d4c6fd068"}>CS 1-5</option>
               {sections === null ? (
                 <option value={null}>Loading...</option>
               ) : (
