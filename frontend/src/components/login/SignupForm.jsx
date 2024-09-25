@@ -102,7 +102,6 @@ const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
         };
         setSignUpBtnMsg("Signing you up...");
         try {
-          console.log(newUser);
           const res = await axios.post(`${URL}/auth/signup`, newUser);
           if (res.data.message === "Signed Up Successfully") {
             setUserId(res.data.id);
@@ -147,7 +146,7 @@ const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
         };
         setSignUpBtnMsg("Sending you a code...");
         try {
-          const res = await axios.put(`${URL}/user/${userId}`, user, {
+          const res = await axios.put(`${URL}/user?userId=${userId}`, user, {
             headers: {
               Authorization: Cookies.get("tempToken"),
             },
@@ -157,7 +156,7 @@ const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
           }); // 1 day expiration
           if (res.data.message === "Account Successfully Updated") {
             const emailRes = await axios.put(`
-            ${URL}/mail/signup/${userId}
+            ${URL}/mail/signup?userId=${userId}
             `);
             setVerificationCode(emailRes.data.verificationToken);
             setSteps((prevStep) => prevStep + 1);
@@ -189,7 +188,9 @@ const SignupForm = ({ handleTermsCondition, handleIsLoggedIn }) => {
         ) {
           Cookies.set("token", Cookies.get("tempToken"));
           Cookies.remove("tempToken");
-          setIsLoggedIn(true);
+          setTimeout(() => {
+            handleIsLoggedIn();
+          }, 1000);
         }
       }
       setEmail("");

@@ -41,7 +41,6 @@ const LoginForm = ({
       const res = await axios.post(`${URL}/auth/login`, user);
       const User = jwtDecode(res.data.token);
       const parsedUser = JSON.parse(User.user);
-      console.log(parsedUser);
       if (parsedUser.nameValid && parsedUser.emailValid) {
         Cookies.set("token", res.data.token, { expires: 30 * 24 * 60 * 60 }); // 30 day expiration
         Cookies.set("userId", parsedUser._id, { expires: 30 * 24 * 60 * 60 }); // 30 day expiration
